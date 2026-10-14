@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Heal in India</title>
+  <meta name="description" content="Manage appointments, wellness packages, unified medical records, travel assistance, and provider operations on Heal in India.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar" role="navigation">
+  <div class="container">
+    <div class="navbar-inner">
+      <a href="/" class="navbar-brand">
+        <div class="brand-logo" aria-hidden="true">🌿</div>
+        <span class="brand-name">Heal in India</span>
+      </a>
+
+      <div class="navbar-nav" id="navbar-nav">
+        <a href="/clinics.html" class="nav-link">Find Clinics</a>
+        <a href="/treatments.html" class="nav-link">Treatments</a>
+        <a href="/travel-visa.html" class="nav-link">Medical Tourism</a>
+        <a href="/records.html" class="nav-link">Health Records</a>
+      </div>
+
+      <div class="navbar-actions">
+        <span class="badge badge-green" id="user-role-badge">Patient</span>
+        <button class="btn btn-ghost btn-sm" data-logout>Logout</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Demo Interactive Role Switcher Banner -->
+<div style="background: var(--color-charcoal); color: white; padding: 12px 0;">
+  <div class="container flex-between flex-wrap gap-3">
+    <div class="flex gap-2 align-items: center">
+      <span style="font-size: 1.1rem;">🎭</span>
+      <span style="font-size: 0.85rem; color: rgba(255,255,255,0.8);"><strong>Demo Role Switcher:</strong> Experience the platform from any user perspective:</span>
+    </div>
+    <div class="flex gap-2 flex-wrap" id="role-switcher-buttons">
+      <button class="btn btn-sm btn-accent" onclick="switchDemoUser('patient1')">Priya (Patient)</button>
+      <button class="btn btn-sm btn-ghost" style="color: white; border: 1px solid rgba(255,255,255,0.3);" onclick="switchDemoUser('patient2')">James (Medical Tourist)</button>
+      <button class="btn btn-sm btn-ghost" style="color: white; border: 1px solid rgba(255,255,255,0.3);" onclick="switchDemoUser('clinic')">Kerala Hub (Clinic)</button>
+      <button class="btn btn-sm btn-ghost" style="color: white; border: 1px solid rgba(255,255,255,0.3);" onclick="switchDemoUser('admin')">Admin (Operations)</button>
+    </div>
+  </div>
+</div>
+
+<main class="section">
+  <div class="container">
+    <!-- Welcome Header -->
+    <div class="flex-between flex-wrap gap-4 mb-8">
+      <div>
+        <h1 style="font-size: 2rem; color: var(--color-charcoal); margin-bottom: 4px;">
+          Welcome back, <span id="welcome-name" class="accent">Priya Sharma</span>
+        </h1>
+        <p style="color: var(--text-secondary);" id="welcome-sub">
+          Here is your personal healthcare & medical wellness overview.
+        </p>
+      </div>
+      <div class="flex gap-3">
+        <a href="/clinics.html" class="btn btn-primary btn-sm">+ Find New Treatment</a>
+        <a href="/records.html" class="btn btn-outline btn-sm">Manage Health Records</a>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         VIEW 1: PATIENT DASHBOARD
+         ========================================== -->
+    <div id="patient-dashboard-view">
+      <!-- Stats / Status Cards -->
+      <div class="grid grid-4 gap-4 mb-8">
+        <div class="card p-5" style="border-left: 4px solid var(--primary);">
+          <div class="caption font-semibold mb-1">Active Bookings</div>
+          <div style="font-size: 2rem; font-weight: 800; color: var(--primary);">1</div>
+          <span class="caption" style="color: var(--color-green-700);">✓ 7-Day Panchakarma Confirmed</span>
+        </div>
+        <div class="card p-5" style="border-left: 4px solid var(--color-teal-600);">
+          <div class="caption font-semibold mb-1">Health Records</div>
+          <div style="font-size: 2rem; font-weight: 800; color: var(--color-teal-700);">3</div>
+          <span class="caption">Prakriti assessment on file</span>
+        </div>
+        <div class="card p-5" style="border-left: 4px solid var(--color-saffron-500);">
+          <div class="caption font-semibold mb-1">Ayush Visa Status</div>
+          <div style="font-size: 2rem; font-weight: 800; color: var(--color-saffron-700);">Issued</div>
+          <span class="caption">Ref: HII-VISA-2026-0042</span>
+        </div>
+        <div class="card p-5" style="border-left: 4px solid var(--color-charcoal);">
+          <div class="caption font-semibold mb-1">Concierge Support</div>
+          <div style="font-size: 2rem; font-weight: 800; color: var(--color-charcoal);">24/7</div>
+          <span class="caption">Airport pickup scheduled</span>
+        </div>
+      </div>
+
+      <!-- Current Bookings Table -->
+      <div class="card p-6 mb-8">
+        <div class="flex-between mb-4">
+          <h2 style="font-size: 1.3rem; margin: 0; color: var(--color-charcoal);">My Treatment Bookings</h2>
+          <a href="/booking.html" class="btn btn-ghost btn-sm">+ Book Consultation</a>
+        </div>
+
+        <div style="overflow-x: auto;">
+          <table class="table" style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr style="background: var(--color-green-50);">
+                <th style="padding: 12px; text-align: left;">Booking ID</th>
+                <th style="padding: 12px; text-align: left;">Healthcare Center</th>
+                <th style="padding: 12px; text-align: left;">Program</th>
+                <th style="padding: 12px; text-align: left;">Dates</th>
+                <th style="padding: 12px; text-align: left;">Amount</th>
+                <th style="padding: 12px; text-align: left;">Status</th>
+                <th style="padding: 12px; text-align: right;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="patient-bookings-body">
+              <tr>
+                <td style="padding: 12px; font-weight: 700; color: var(--primary);">HII-2026-BK7712</td>
+                <td style="padding: 12px;">Kerala Ayurveda Heritage Centre (Kochi)</td>
+                <td style="padding: 12px;">7-Day Panchakarma Detox</td>
+                <td style="padding: 12px;">Nov 5 – Nov 12, 2026</td>
+                <td style="padding: 12px; font-weight: 700;">₹45,000</td>
+                <td style="padding: 12px;"><span class="badge badge-green">✓ Confirmed</span></td>
+                <td style="padding: 12px; text-align: right;">
+                  <button class="btn btn-ghost btn-sm" onclick="App.UI.showAlert('Showing booking itinerary...', 'info');">View Voucher</button>
+                </td>
+              </tr>
+              <tr style="background: var(--color-cream-50);">
+                <td style="padding: 12px; font-weight: 700; color: var(--primary);">HII-2026-BK4920</td>
+                <td style="padding: 12px;">Mumbai Integrative Health Clinic</td>
+                <td style="padding: 12px;">Specialist Follow-up Consultation</td>
+                <td style="padding: 12px;">Oct 25, 2026</td>
+                <td style="padding: 12px; font-weight: 700;">₹2,500</td>
+                <td style="padding: 12px;"><span class="badge badge-green">✓ Confirmed</span></td>
+                <td style="padding: 12px; text-align: right;">
+                  <button class="btn btn-ghost btn-sm" onclick="App.UI.showAlert('Teleconsultation link active on appointment date.', 'info');">Join Telehealth</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Quick Action Panels -->
+      <div class="grid grid-2 gap-6">
+        <div class="card p-6" style="background: var(--color-green-50); border: 1px solid var(--color-green-200);">
+          <h3 style="font-size: 1.15rem; color: var(--primary); margin-bottom: 8px;">🌿 Share Health History with Center</h3>
+          <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 16px;">
+            Dr. Vaidya Krishnan can prepare personalized medicated oils and pre-cleansing herbal decoctions if your medical history is shared prior to arrival.
+          </p>
+          <a href="/records.html" class="btn btn-primary btn-sm">Manage & Share Records →</a>
+        </div>
+
+        <div class="card p-6" style="background: var(--color-cream-100); border: 1px solid var(--color-saffron-300);">
+          <h3 style="font-size: 1.15rem; color: var(--color-saffron-800); margin-bottom: 8px;">🛂 Ayush Visa Support Letter Ready</h3>
+          <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 16px;">
+            Your official letter from Kerala Ayurveda Heritage Centre has been generated and validated by our medical board.
+          </p>
+          <button class="btn btn-accent btn-sm" onclick="App.UI.showAlert('Downloading official Ayush Visa Support Letter PDF...', 'success');">Download Letter PDF</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         VIEW 2: CLINIC PROVIDER DASHBOARD
+         ========================================== -->
+    <div id="clinic-dashboard-view" class="hidden">
+      <div class="card p-5 mb-8" style="background: var(--color-green-50); border: 1px solid var(--color-green-200);">
+        <div class="flex-between flex-wrap gap-4">
+          <div>
+            <div class="badge badge-green mb-1">✓ NABH & AYUSH Approved Clinic</div>
+            <h3 style="margin: 0; color: var(--color-charcoal);">Kerala Ayurveda Heritage Centre</h3>
+            <p class="caption" style="margin: 4px 0 0;">Kochi, Kerala • 12 Active Therapy Packages • 26 Years Certified</p>
+          </div>
+          <div>
+            <span class="badge badge-teal" style="font-size: 0.9rem; padding: 6px 12px;">Status: Live & Verified</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-3 gap-6 mb-8">
+        <div class="card p-5">
+          <div class="caption font-semibold">Total Patient Bookings</div>
+          <div style="font-size: 2.2rem; font-weight: 800; color: var(--primary);">234</div>
+          <span class="caption text-primary">★ 4.8 Rating (310 Reviews)</span>
+        </div>
+        <div class="card p-5">
+          <div class="caption font-semibold">Active Inquiries This Month</div>
+          <div style="font-size: 2.2rem; font-weight: 800; color: var(--color-teal-700);">18</div>
+          <span class="caption">5 International Ayush Visa Inquiries</span>
+        </div>
+        <div class="card p-5">
+          <div class="caption font-semibold">Upcoming Check-ins</div>
+          <div style="font-size: 2.2rem; font-weight: 800; color: var(--color-saffron-700);">6</div>
+          <span class="caption">Next: Priya Sharma (Nov 5)</span>
+        </div>
+      </div>
+
+      <div class="card p-6">
+        <div class="flex-between mb-4">
+          <h2 style="font-size: 1.3rem; margin: 0;">Incoming Patient Bookings</h2>
+          <span class="caption">Real-time scheduling feed</span>
+        </div>
+        <table class="table" style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr style="background: var(--color-green-50);">
+              <th style="padding: 12px; text-align: left;">Patient Name</th>
+              <th style="padding: 12px; text-align: left;">Treatment Package</th>
+              <th style="padding: 12px; text-align: left;">Arrival</th>
+              <th style="padding: 12px; text-align: left;">Health Notes</th>
+              <th style="padding: 12px; text-align: right;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding: 12px; font-weight: 700;">Priya Sharma</td>
+              <td style="padding: 12px;">7-Day Panchakarma Detox</td>
+              <td style="padding: 12px;">Nov 5, 2026</td>
+              <td style="padding: 12px;"><span class="badge badge-teal">Vata Imbalance • Records Attached</span></td>
+              <td style="padding: 12px; text-align: right;">
+                <button class="btn btn-outline btn-sm" onclick="App.UI.showAlert('Assigning Senior Vaidya to patient file...', 'success');">Assign Doctor</button>
+              </td>
+            </tr>
+            <tr style="background: var(--color-cream-50);">
+              <td style="padding: 12px; font-weight: 700;">James Anderson (USA)</td>
+              <td style="padding: 12px;">14-Day Ayurveda Rejuvenation</td>
+              <td style="padding: 12px;">Dec 1, 2026</td>
+              <td style="padding: 12px;"><span class="badge badge-saffron">Visa Support Letter Issued</span></td>
+              <td style="padding: 12px; text-align: right;">
+                <button class="btn btn-outline btn-sm" onclick="App.UI.showAlert('Airport transfer confirmed with international desk.', 'success');">Confirm Pickup</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         VIEW 3: ADMIN PLATFORM DASHBOARD
+         ========================================== -->
+    <div id="admin-dashboard-view" class="hidden">
+      <div class="badge badge-accent mb-4">🏛️ Platform Administration & Compliance Control</div>
+      
+      <div class="grid grid-4 gap-4 mb-8">
+        <div class="card p-5">
+          <div class="caption font-semibold">Total Registered Users</div>
+          <div style="font-size: 2rem; font-weight: 800; color: var(--primary);" id="admin-users">1,420</div>
+          <span class="caption">Patients, Doctors & Centers</span>
+        </div>
+        <div class="card p-5">
+          <div class="caption font-semibold">Verified Centers</div>
+          <div style="font-size: 2rem; font-weight: 800; color: var(--color-teal-700);" id="admin-clinics">12</div>
+          <span class="caption">AYUSH & NABH standard</span>
+        </div>
+        <div class="card p-5">
+          <div class="caption font-semibold">Pending Verifications</div>
+          <div style="font-size: 2rem; font-weight: 800; color: var(--color-saffron-700);">2</div>
+          <span class="caption" style="color: var(--color-saffron-800); font-weight:600;">Action required</span>
+        </div>
+        <div class="card p-5">
+          <div class="caption font-semibold">Platform Gross GMV</div>
+          <div style="font-size: 2rem; font-weight: 800; color: var(--primary);">₹1.84 Cr</div>
+          <span class="caption">Secure Razorpay Escrow</span>
+        </div>
+      </div>
+
+      <div class="card p-6 mb-8">
+        <h2 style="font-size: 1.3rem; margin-bottom: 16px; color: var(--color-charcoal);">Clinic Verification Queue</h2>
+        <table class="table" style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr style="background: var(--color-green-50);">
+              <th style="padding: 12px; text-align: left;">Facility Name</th>
+              <th style="padding: 12px; text-align: left;">Type</th>
+              <th style="padding: 12px; text-align: left;">Location</th>
+              <th style="padding: 12px; text-align: left;">AYUSH Registration</th>
+              <th style="padding: 12px; text-align: right;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding: 12px; font-weight: 700;">Chennai Diagnostics & Wellness</td>
+              <td style="padding: 12px;"><span class="badge badge-gray">Diagnostics</span></td>
+              <td style="padding: 12px;">Chennai, Tamil Nadu</td>
+              <td style="padding: 12px;">NABL-TN-2024-011</td>
+              <td style="padding: 12px; text-align: right;">
+                <button class="btn btn-primary btn-sm" onclick="App.UI.showAlert('Facility verified and approved!', 'success'); this.disabled=true; this.textContent='Approved';">Approve Center</button>
+              </td>
+            </tr>
+            <tr style="background: var(--color-cream-50);">
+              <td style="padding: 12px; font-weight: 700;">Varanasi Integrative Healing</td>
+              <td style="padding: 12px;"><span class="badge badge-green">Integrated</span></td>
+              <td style="padding: 12px;">Varanasi, UP</td>
+              <td style="padding: 12px;">AYUSH-UP-2024-010</td>
+              <td style="padding: 12px; text-align: right;">
+                <button class="btn btn-primary btn-sm" onclick="App.UI.showAlert('Facility verified and approved!', 'success'); this.disabled=true; this.textContent='Approved';">Approve Center</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container text-center">
+    <p>© 2026 Heal in India. Medical Tourism & Integrated Wellness Platform.</p>
+  </div>
+</footer>
+
+<script src="/js/app.js"></script>
+<script>
+  function switchDemoUser(roleKey) {
+    const views = {
+      patient1: {
+        role: 'patient',
+        name: 'Priya Sharma',
+        sub: 'Here is your personal healthcare & medical wellness overview.',
+        badge: 'Patient'
+      },
+      patient2: {
+        role: 'patient',
+        name: 'James Anderson',
+        sub: 'Medical Tourism & Ayush Visa Portal • International Guest (USA)',
+        badge: 'International Tourist'
+      },
+      clinic: {
+        role: 'clinic',
+        name: 'Kerala Ayurveda Heritage',
+        sub: 'Healthcare Provider & Wellness Facility Administration',
+        badge: 'Clinic Provider'
+      },
+      admin: {
+        role: 'admin',
+        name: 'Admin Kumar',
+        sub: 'National Healthcare Verification & Governance Operations',
+        badge: 'Platform Admin'
+      }
+    };
+
+    const target = views[roleKey] || views.patient1;
+
+    // Save session
+    App.Auth.save({
+      id: roleKey === 'admin' ? '00000000-0000-0000-0000-000000000001' :
+          roleKey === 'clinic' ? '00000000-0000-0000-0000-000000000002' :
+          roleKey === 'patient2' ? '00000000-0000-0000-0000-000000000005' : '00000000-0000-0000-0000-000000000004',
+      role: target.role,
+      full_name: target.name,
+      email: `${roleKey}@healinindia.com`
+    }, { access_token: `demo_token_${roleKey}` });
+
+    // Update UI elements
+    document.getElementById('welcome-name').textContent = target.name;
+    document.getElementById('welcome-sub').textContent = target.sub;
+    document.getElementById('user-role-badge').textContent = target.badge;
+
+    // Toggle views
+    document.getElementById('patient-dashboard-view').classList.toggle('hidden', target.role !== 'patient');
+    document.getElementById('clinic-dashboard-view').classList.toggle('hidden', target.role !== 'clinic');
+    document.getElementById('admin-dashboard-view').classList.toggle('hidden', target.role !== 'admin');
+
+    // Update button styles
+    document.querySelectorAll('#role-switcher-buttons button').forEach(b => {
+      b.className = 'btn btn-sm btn-ghost';
+      b.style.color = 'white';
+      b.style.border = '1px solid rgba(255,255,255,0.3)';
+    });
+    event.target.className = 'btn btn-sm btn-accent';
+
+    App.UI.showAlert(`Switched perspective to ${target.name} (${target.badge})`, 'info', null, 2500);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Default to patient1
+    if (!App.Auth.isLoggedIn()) {
+      switchDemoUser('patient1');
+    } else {
+      const user = App.Auth.getUser();
+      if (user?.role === 'admin') switchDemoUser('admin');
+      else if (user?.role === 'clinic') switchDemoUser('clinic');
+      else switchDemoUser('patient1');
+    }
+  });
+</script>
+</body>
+</html>

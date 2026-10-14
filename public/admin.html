@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="0; url=/dashboard.html">
+  <title>Redirecting to Admin Portal...</title>
+</head>
+<body>
+  <script>
+    // Ensure admin demo session is set if not already
+    const session = localStorage.getItem('hii_session');
+    if (!session) {
+      localStorage.setItem('hii_session', JSON.stringify({
+        user: { id: '00000000-0000-0000-0000-000000000001', role: 'admin', full_name: 'Admin Kumar', email: 'admin@healinindia.com' },
+        session: { access_token: 'demo_token_admin' }
+      }));
+    }
+    window.location.href = '/dashboard.html';
+  </script>
+</body>
+</html>

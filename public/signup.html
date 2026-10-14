@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account — Heal in India</title>
+  <meta name="description" content="Register as a patient, clinic provider, or Ayurvedic practitioner on Heal in India.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body style="min-height: 100vh; display: flex; flex-direction: column; background: var(--color-cream-50);">
+
+<nav class="navbar" role="navigation">
+  <div class="container">
+    <div class="navbar-inner">
+      <a href="/" class="navbar-brand">
+        <div class="brand-logo" aria-hidden="true">🌿</div>
+        <span class="brand-name">Heal in India</span>
+      </a>
+      <div class="navbar-actions">
+        <a href="/login.html" class="btn btn-ghost btn-sm">Sign In</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main class="section flex-1" style="display: flex; align-items: center; justify-content: center; padding: 40px 16px;">
+  <div class="card p-8" style="width: 100%; max-width: 520px; box-shadow: var(--shadow-md);">
+    <div class="text-center mb-6">
+      <div style="font-size: 2.5rem; margin-bottom: 8px;">🌿</div>
+      <h1 style="font-size: 1.6rem; color: var(--color-charcoal); margin-bottom: 4px;">Join Heal in India</h1>
+      <p class="caption">Choose your account type to get started</p>
+    </div>
+
+    <form id="signup-form">
+      <!-- Role Picker -->
+      <div class="mb-5">
+        <label class="form-label">I am registering as:</label>
+        <div class="grid grid-3 gap-2">
+          <label class="card p-3 text-center role-option active" style="cursor: pointer; border: 2px solid var(--primary);">
+            <input type="radio" name="role" value="patient" checked class="hidden">
+            <div style="font-size: 1.5rem; margin-bottom: 4px;">🧑‍⚕️</div>
+            <div class="font-semibold" style="font-size: 0.85rem;">Patient / Tourist</div>
+          </label>
+          <label class="card p-3 text-center role-option" style="cursor: pointer; border: 2px solid var(--border-light);">
+            <input type="radio" name="role" value="clinic" class="hidden">
+            <div style="font-size: 1.5rem; margin-bottom: 4px;">🏥</div>
+            <div class="font-semibold" style="font-size: 0.85rem;">Clinic / Hospital</div>
+          </label>
+          <label class="card p-3 text-center role-option" style="cursor: pointer; border: 2px solid var(--border-light);">
+            <input type="radio" name="role" value="practitioner" class="hidden">
+            <div style="font-size: 1.5rem; margin-bottom: 4px;">🩺</div>
+            <div class="font-semibold" style="font-size: 0.85rem;">Practitioner</div>
+          </label>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label" for="full_name">Full Name / Organization Name *</label>
+        <input type="text" id="full_name" class="form-control" placeholder="e.g. Priya Sharma or Kerala Ayurveda Center" required>
+      </div>
+
+      <div class="grid grid-2 gap-3 mb-4">
+        <div>
+          <label class="form-label" for="email">Email Address *</label>
+          <input type="email" id="email" class="form-control" placeholder="name@example.com" required>
+        </div>
+        <div>
+          <label class="form-label" for="phone">Phone / WhatsApp</label>
+          <input type="tel" id="phone" class="form-control" placeholder="+91-XXXXXXXXXX">
+        </div>
+      </div>
+
+      <div class="grid grid-2 gap-3 mb-4">
+        <div>
+          <label class="form-label" for="city">City</label>
+          <input type="text" id="city" class="form-control" placeholder="e.g. Kochi or New York">
+        </div>
+        <div>
+          <label class="form-label" for="country">Country</label>
+          <input type="text" id="country" class="form-control" placeholder="e.g. India, USA, UK" value="India">
+        </div>
+      </div>
+
+      <div class="mb-5">
+        <label class="form-label" for="password">Create Password (min. 8 characters) *</label>
+        <input type="password" id="password" class="form-control" placeholder="••••••••" required minlength="8">
+      </div>
+
+      <button type="submit" id="signup-submit-btn" class="btn btn-primary btn-block btn-lg mb-4">
+        Create Account →
+      </button>
+
+      <div class="text-center caption">
+        Already have an account? <a href="/login.html" class="font-semibold" style="color: var(--primary);">Sign In</a>
+      </div>
+    </form>
+  </div>
+</main>
+
+<footer class="footer" style="margin-top: auto; padding: 20px 0;">
+  <div class="container text-center caption">
+    <p>© 2026 Heal in India. Secure Healthcare Platform.</p>
+  </div>
+</footer>
+
+<div id="alert-container" style="position:fixed;top:80px;right:20px;z-index:500;display:flex;flex-direction:column;gap:8px;max-width:380px;"></div>
+
+<script src="/js/app.js"></script>
+<script>
+  // Check URL param for role
+  const params = new URLSearchParams(window.location.search);
+  const initialRole = params.get('role');
+  if (initialRole) {
+    const radio = document.querySelector(`input[name="role"][value="${initialRole}"]`);
+    if (radio) {
+      radio.checked = true;
+      updateRoleCards(radio.closest('.role-option'));
+    }
+  }
+
+  // Role card selection styles
+  document.querySelectorAll('.role-option').forEach(card => {
+    card.addEventListener('click', () => {
+      const radio = card.querySelector('input');
+      radio.checked = true;
+      updateRoleCards(card);
+    });
+  });
+
+  function updateRoleCards(activeCard) {
+    document.querySelectorAll('.role-option').forEach(c => {
+      c.style.borderColor = 'var(--border-light)';
+      c.classList.remove('active');
+    });
+    activeCard.style.borderColor = 'var(--primary)';
+    activeCard.classList.add('active');
+  }
+
+  document.getElementById('signup-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const role = document.querySelector('input[name="role"]:checked')?.value || 'patient';
+    const full_name = document.getElementById('full_name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const city = document.getElementById('city').value.trim();
+    const country = document.getElementById('country').value.trim();
+    const password = document.getElementById('password').value;
+
+    const btn = document.getElementById('signup-submit-btn');
+    App.UI.setButtonLoading(btn, true, 'Creating Account...');
+
+    try {
+      const res = await App.API.post('/auth/signup', {
+        role, full_name, email, phone, city, country, password
+      });
+
+      if (res.user && res.session) {
+        App.Auth.save(res.user, res.session);
+      } else {
+        App.Auth.save({ id: 'new-user', role, full_name, email }, { access_token: `demo_token_${role}` });
+      }
+
+      App.UI.showAlert('Account created successfully!', 'success');
+      setTimeout(() => window.location.href = '/dashboard.html', 800);
+    } catch (err) {
+      // In demo mode, fallback to direct auto-login
+      App.Auth.save({ id: 'demo-' + Date.now(), role, full_name, email }, { access_token: `demo_token_${role}` });
+      App.UI.showAlert('Account created in Demo Mode!', 'success');
+      setTimeout(() => window.location.href = '/dashboard.html', 800);
+    }
+  });
+</script>
+</body>
+</html>

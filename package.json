@@ -1,0 +1,34 @@
+{
+  "name": "heal-in-india",
+  "version": "1.0.0",
+  "description": "Integrated healthcare and medical-wellness tourism platform for India",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js",
+    "setup": "node scripts/setup.js"
+  },
+  "keywords": ["ayurveda", "panchakarma", "medical-tourism", "healthcare", "india", "wellness"],
+  "author": "Heal in India",
+  "license": "MIT",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "express-rate-limit": "^7.4.0",
+    "express-validator": "^7.2.0",
+    "helmet": "^8.0.0",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "razorpay": "^2.9.2",
+    "resend": "^4.0.0",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

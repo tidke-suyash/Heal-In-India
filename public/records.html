@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unified Health Records — Heal in India</title>
+  <meta name="description" content="Securely store, organize, and share your Ayurveda prakriti assessments, diagnostic lab tests, prescriptions, and medical records across healthcare providers.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+
+<div class="disclaimer-strip" role="note">
+  🔒 <strong>Health Data Privacy:</strong> Your records are strictly confidential and encrypted. You decide which clinic or Vaidya has access.
+</div>
+
+<nav class="navbar" role="navigation">
+  <div class="container">
+    <div class="navbar-inner">
+      <a href="/" class="navbar-brand">
+        <div class="brand-logo" aria-hidden="true">🌿</div>
+        <span class="brand-name">Heal in India</span>
+      </a>
+
+      <div class="navbar-nav" id="navbar-nav">
+        <a href="/clinics.html" class="nav-link">Find Clinics</a>
+        <a href="/treatments.html" class="nav-link">Treatments</a>
+        <a href="/travel-visa.html" class="nav-link">Medical Tourism</a>
+        <a href="/records.html" class="nav-link active">Health Records</a>
+      </div>
+
+      <div class="navbar-actions">
+        <div data-auth-show="loggedOut" class="flex gap-2">
+          <a href="/login.html" class="btn btn-ghost btn-sm">Login</a>
+          <a href="/signup.html" class="btn btn-primary btn-sm">Get Started</a>
+        </div>
+        <div data-auth-show="loggedIn" class="hidden flex gap-2">
+          <a href="/dashboard.html" class="btn btn-outline btn-sm">Dashboard</a>
+          <button class="btn btn-ghost btn-sm" data-logout>Logout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<header class="section-sm" style="background: linear-gradient(135deg, var(--color-green-50), var(--color-teal-50)); border-bottom: 1px solid var(--border-light);">
+  <div class="container">
+    <div class="flex-between flex-wrap gap-4">
+      <div>
+        <div class="badge badge-teal mb-2">📁 Unified Patient Health Record (PHR)</div>
+        <h1 style="font-size: 2.1rem; color: var(--color-charcoal); margin-bottom: 6px;">Your Health History, Unified.</h1>
+        <p style="color: var(--text-secondary); max-width: 600px;">
+          Seamlessly connect Ayurvedic pulse diagnoses, Panchakarma discharge summaries, and modern diagnostic reports under one secure profile.
+        </p>
+      </div>
+      <div class="flex gap-3">
+        <button id="share-code-btn" class="btn btn-outline btn-sm">🔑 Doctor Access Pass</button>
+        <button id="upload-record-btn" class="btn btn-primary btn-sm">+ Upload Record</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="section">
+  <div class="container">
+    <!-- Filter Tabs -->
+    <div class="flex-between mb-6 flex-wrap gap-4">
+      <div class="flex gap-2 flex-wrap">
+        <button class="btn btn-primary btn-sm record-filter-btn active" data-filter="all">All Records</button>
+        <button class="btn btn-ghost btn-sm record-filter-btn" data-filter="ayurveda_assessment">🌿 Ayurveda Prakriti</button>
+        <button class="btn btn-ghost btn-sm record-filter-btn" data-filter="lab_report">🔬 Lab Tests</button>
+        <button class="btn btn-ghost btn-sm record-filter-btn" data-filter="imaging">🩻 Imaging & Scans</button>
+        <button class="btn btn-ghost btn-sm record-filter-btn" data-filter="prescription">💊 Prescriptions</button>
+      </div>
+      <div>
+        <span id="record-count-badge" class="badge badge-gray">3 Records</span>
+      </div>
+    </div>
+
+    <!-- Records Grid -->
+    <div id="records-container" class="flex flex-column gap-4">
+      <!-- Populated via JS -->
+    </div>
+  </div>
+</main>
+
+<!-- Upload Record Modal -->
+<div id="upload-modal" class="modal-overlay hidden">
+  <div class="modal" style="max-width: 550px;">
+    <div class="modal-header">
+      <h3 style="margin: 0; font-size: 1.25rem;">Upload Health Document</h3>
+      <button class="modal-close" id="close-upload-modal">✕</button>
+    </div>
+    <form id="record-upload-form" class="modal-body">
+      <div class="mb-4">
+        <label class="form-label" for="rec-title">Document Title *</label>
+        <input type="text" id="rec-title" class="form-control" placeholder="e.g. Kerala Vaidya Prakriti Report, Blood Panel..." required>
+      </div>
+      <div class="grid grid-2 gap-4 mb-4">
+        <div>
+          <label class="form-label" for="rec-category">Category *</label>
+          <select id="rec-category" class="form-control" required>
+            <option value="ayurveda_assessment">Ayurveda Assessment</option>
+            <option value="lab_report">Diagnostic Lab Report</option>
+            <option value="imaging">Imaging (MRI / X-Ray)</option>
+            <option value="prescription">Prescription / Diet Plan</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label" for="rec-date">Date of Document</label>
+          <input type="date" id="rec-date" class="form-control" required>
+        </div>
+      </div>
+      <div class="grid grid-2 gap-4 mb-4">
+        <div>
+          <label class="form-label" for="rec-provider">Facility / Clinic Name</label>
+          <input type="text" id="rec-provider" class="form-control" placeholder="e.g. Kerala Ayurveda Heritage">
+        </div>
+        <div>
+          <label class="form-label" for="rec-doctor">Attending Doctor / Vaidya</label>
+          <input type="text" id="rec-doctor" class="form-control" placeholder="e.g. Dr. Vaidya Krishnan">
+        </div>
+      </div>
+      <div class="mb-4">
+        <label class="form-label" for="rec-summary">Key Summary / Recommendations</label>
+        <textarea id="rec-summary" class="form-control" rows="2" placeholder="e.g. Vata-Pitta dominant, cholesterol normal, advised 14-day detox..."></textarea>
+      </div>
+
+      <!-- File Dropzone Simulation -->
+      <div class="card p-6 text-center mb-6" style="border: 2px dashed var(--color-teal-300); background: var(--color-teal-50); cursor: pointer;" id="dropzone">
+        <div style="font-size: 2rem; margin-bottom: 6px;">📄</div>
+        <div class="font-semibold" id="dropzone-text">Click or drag PDF / Image here</div>
+        <span class="caption">Supports PDF, JPG, PNG up to 10MB</span>
+        <input type="file" id="file-input" class="hidden" accept=".pdf,.jpg,.jpeg,.png">
+      </div>
+
+      <div class="flex-between">
+        <button type="button" class="btn btn-ghost" id="cancel-upload">Cancel</button>
+        <button type="submit" id="save-record-btn" class="btn btn-primary">Save to Health Profile</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Doctor Access Code Modal -->
+<div id="code-modal" class="modal-overlay hidden">
+  <div class="modal text-center" style="max-width: 450px;">
+    <div style="font-size: 3rem; margin-bottom: 12px;">🔑</div>
+    <h3 style="margin-bottom: 8px;">Temporary Doctor Access Pass</h3>
+    <p class="caption mb-4">Share this 6-digit code with your attending doctor or clinic coordinator. It grants secure read-only access for 24 hours.</p>
+
+    <div class="card p-4 mb-4" style="background: var(--color-green-50); border: 2px solid var(--primary); font-size: 2rem; font-weight: 800; letter-spacing: 4px; color: var(--primary);">
+      841-920
+    </div>
+
+    <p class="caption mb-6">🔒 You can revoke access at any time from your privacy settings.</p>
+    <button class="btn btn-primary btn-block" id="close-code-modal">Done</button>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container text-center">
+    <p>© 2026 Heal in India. Medical Tourism & Integrated Wellness Platform.</p>
+  </div>
+</footer>
+
+<script src="/js/app.js"></script>
+<script>
+  let healthRecords = [];
+
+  async function loadRecords() {
+    // Demo auto-login if needed
+    if (!App.Auth.isLoggedIn()) {
+      App.Auth.save({
+        id: '00000000-0000-0000-0000-000000000004',
+        role: 'patient',
+        full_name: 'Priya Sharma',
+        email: 'patient1@healinindia.com'
+      }, { access_token: 'demo_token_patient' });
+    }
+
+    try {
+      const records = await App.API.get('/records');
+      healthRecords = records || [];
+      renderRecords(healthRecords);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  function renderRecords(records) {
+    const container = document.getElementById('records-container');
+    document.getElementById('record-count-badge').textContent = `${records.length} Records`;
+
+    if (records.length === 0) {
+      container.innerHTML = `
+        <div class="card p-8 text-center">
+          <div style="font-size: 2.5rem; margin-bottom: 10px;">📂</div>
+          <p class="font-semibold mb-1">No records in this category</p>
+          <p class="caption">Upload your prescriptions, test reports, or Ayurvedic assessments above.</p>
+        </div>
+      `;
+      return;
+    }
+
+    const icons = {
+      ayurveda_assessment: '🌿',
+      lab_report: '🔬',
+      imaging: '🩻',
+      prescription: '💊'
+    };
+
+    container.innerHTML = records.map(rec => `
+      <article class="card p-5" style="border-left: 4px solid var(--primary);">
+        <div class="flex-between flex-wrap gap-3 mb-2">
+          <div class="flex gap-3 align-items: center">
+            <span style="font-size: 1.8rem;">${icons[rec.category] || '📄'}</span>
+            <div>
+              <h3 style="font-size: 1.15rem; margin-bottom: 2px;">${rec.title}</h3>
+              <span class="caption" style="color: var(--text-secondary);">
+                ${rec.provider_name || 'Independent Health Assessment'} • ${rec.doctor_name ? 'Attending: ' + rec.doctor_name : ''}
+              </span>
+            </div>
+          </div>
+          <div class="flex gap-2 align-items: center">
+            <span class="caption font-semibold">📅 ${rec.record_date || '2026-09-18'}</span>
+            <span class="badge ${rec.shared_with_clinic ? 'badge-green' : 'badge-gray'}">
+              ${rec.shared_with_clinic ? '✓ Shared with Clinic' : '🔒 Private'}
+            </span>
+          </div>
+        </div>
+
+        <p style="font-size: 0.9rem; color: var(--color-gray-700); line-height: 1.5; background: var(--color-cream-50); padding: 12px; border-radius: var(--radius-sm); margin-bottom: 12px;">
+          ${rec.summary || 'Clinical record on file. Contains doshic diagnostics and recommended therapeutic regimens.'}
+        </p>
+
+        <div class="flex-between caption pt-2" style="border-top: 1px solid var(--border-light);">
+          <span>Format: PDF / Digital Record</span>
+          <div class="flex gap-2">
+            <button class="btn btn-ghost btn-sm" onclick="App.UI.showAlert('Downloading confidential record PDF...', 'info');">View File</button>
+            <button class="btn btn-outline btn-sm" onclick="toggleShare('${rec.id}');">
+              ${rec.shared_with_clinic ? 'Revoke Clinic Access' : 'Share with Attending Clinic'}
+            </button>
+          </div>
+        </div>
+      </article>
+    `).join('');
+  }
+
+  function toggleShare(id) {
+    const item = healthRecords.find(r => r.id === id);
+    if (item) {
+      item.shared_with_clinic = !item.shared_with_clinic;
+      renderRecords(healthRecords);
+      App.UI.showAlert(item.shared_with_clinic ? 'Record shared with clinic!' : 'Access revoked.', 'success');
+    }
+  }
+
+  // Filters
+  document.querySelectorAll('.record-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.record-filter-btn').forEach(b => {
+        b.classList.remove('btn-primary', 'active');
+        b.classList.add('btn-ghost');
+      });
+      btn.classList.add('btn-primary', 'active');
+      btn.classList.remove('btn-ghost');
+
+      const filter = btn.dataset.filter;
+      const filtered = filter === 'all' ? healthRecords : healthRecords.filter(r => r.category === filter);
+      renderRecords(filtered);
+    });
+  });
+
+  // Upload modal handlers
+  const uploadModal = document.getElementById('upload-modal');
+  document.getElementById('upload-record-btn').addEventListener('click', () => {
+    document.getElementById('rec-date').value = new Date().toISOString().split('T')[0];
+    uploadModal.classList.remove('hidden');
+  });
+  document.getElementById('close-upload-modal').addEventListener('click', () => uploadModal.classList.add('hidden'));
+  document.getElementById('cancel-upload').addEventListener('click', () => uploadModal.classList.add('hidden'));
+
+  // Dropzone simulate
+  const dropzone = document.getElementById('dropzone');
+  const fileInput = document.getElementById('file-input');
+  dropzone.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files.length) {
+      document.getElementById('dropzone-text').textContent = `✓ Selected: ${fileInput.files[0].name}`;
+    }
+  });
+
+  document.getElementById('record-upload-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const newRecord = {
+      id: 'rec-' + Date.now(),
+      title: document.getElementById('rec-title').value,
+      category: document.getElementById('rec-category').value,
+      record_date: document.getElementById('rec-date').value,
+      provider_name: document.getElementById('rec-provider').value || 'Uploaded by Patient',
+      doctor_name: document.getElementById('rec-doctor').value || 'Self Reported',
+      summary: document.getElementById('rec-summary').value || 'Patient provided healthcare record.',
+      shared_with_clinic: true
+    };
+    healthRecords.unshift(newRecord);
+    renderRecords(healthRecords);
+    uploadModal.classList.add('hidden');
+    App.UI.showAlert('Record uploaded successfully and secured!', 'success');
+  });
+
+  // Doctor access code modal
+  const codeModal = document.getElementById('code-modal');
+  document.getElementById('share-code-btn').addEventListener('click', () => codeModal.classList.remove('hidden'));
+  document.getElementById('close-code-modal').addEventListener('click', () => codeModal.classList.add('hidden'));
+
+  document.addEventListener('DOMContentLoaded', loadRecords);
+</script>
+</body>
+</html>

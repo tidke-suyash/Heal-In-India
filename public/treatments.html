@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Treatments & Wellness Packages — Heal in India</title>
+  <meta name="description" content="Discover classical Ayurveda therapies, Panchakarma multi-day detox packages, and modern medical wellness programs across verified centers in India.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+
+<div class="disclaimer-strip" role="note">
+  ⚕️ <strong>Medical Disclaimer:</strong> Treatments are therapeutic protocols. An initial Vaidya/Doctor consultation determines appropriateness.
+</div>
+
+<nav class="navbar" role="navigation">
+  <div class="container">
+    <div class="navbar-inner">
+      <a href="/" class="navbar-brand">
+        <div class="brand-logo" aria-hidden="true">🌿</div>
+        <span class="brand-name">Heal in India</span>
+      </a>
+
+      <div class="navbar-nav" id="navbar-nav">
+        <a href="/clinics.html" class="nav-link">Find Clinics</a>
+        <a href="/treatments.html" class="nav-link active">Treatments</a>
+        <a href="/travel-visa.html" class="nav-link">Medical Tourism</a>
+        <a href="/records.html" class="nav-link">Health Records</a>
+      </div>
+
+      <div class="navbar-actions">
+        <div data-auth-show="loggedOut" class="flex gap-2">
+          <a href="/login.html" class="btn btn-ghost btn-sm">Login</a>
+          <a href="/signup.html" class="btn btn-primary btn-sm">Get Started</a>
+        </div>
+        <div data-auth-show="loggedIn" class="hidden flex gap-2">
+          <a href="/dashboard.html" class="btn btn-outline btn-sm">Dashboard</a>
+          <button class="btn btn-ghost btn-sm" data-logout>Logout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<header class="section-sm" style="background: linear-gradient(135deg, var(--color-green-700), var(--color-teal-800)); color: white;">
+  <div class="container">
+    <div class="badge badge-accent mb-2">💫 Traditional Wisdom Meets Modern Quality</div>
+    <h1 style="font-size: 2.3rem; color: white; margin-bottom: 8px;">Treatments & Multi-Day Packages</h1>
+    <p style="color: rgba(255,255,255,0.85); max-width: 680px; font-size: 1.05rem;">
+      From classical 5-step Panchakarma cleansing to anti-aging Rasayana and stress recovery retreats, explore all-inclusive programs certified by senior practitioners.
+    </p>
+  </div>
+</header>
+
+<main class="section">
+  <div class="container">
+    <!-- Category Tabs -->
+    <div class="flex gap-3 mb-8 flex-wrap" style="border-bottom: 2px solid var(--border-light); padding-bottom: 12px;">
+      <button class="btn btn-primary btn-sm tab-btn active" data-tab="packages">Multi-Day Packages (7-21 Days)</button>
+      <button class="btn btn-ghost btn-sm tab-btn" data-tab="therapies">Individual Classical Therapies</button>
+      <button class="btn btn-ghost btn-sm tab-btn" data-tab="guide">Panchakarma Protocol Guide</button>
+    </div>
+
+    <!-- TAB 1: Multi-day Packages -->
+    <section id="tab-packages">
+      <div class="flex-between mb-6 flex-wrap gap-4">
+        <div>
+          <h2 style="font-size: 1.4rem; color: var(--color-charcoal); margin-bottom: 4px;">Featured All-Inclusive Wellness Programs</h2>
+          <p class="caption">Includes consultation, accommodation, organic meals, daily treatments, and discharge report.</p>
+        </div>
+        <div class="flex gap-2">
+          <select id="package-cat-filter" class="form-control" style="width: auto; padding: 6px 12px; font-size: 0.85rem;">
+            <option value="">All Categories</option>
+            <option value="panchakarma">Panchakarma</option>
+            <option value="ayurveda">Ayurveda Rejuvenation</option>
+            <option value="wellness_retreat">Wellness Retreat</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-2 gap-6" id="packages-container">
+        <!-- Rendered via JS -->
+      </div>
+    </section>
+
+    <!-- TAB 2: Individual Therapies -->
+    <section id="tab-therapies" class="hidden">
+      <div class="mb-6">
+        <h2 style="font-size: 1.4rem; color: var(--color-charcoal); margin-bottom: 4px;">Classical Ayurvedic & Integrative Procedures</h2>
+        <p class="caption">Explore stand-alone authentic therapies administered at verified clinics across India.</p>
+      </div>
+
+      <div class="grid grid-3 gap-6" id="therapies-container">
+        <!-- Rendered via JS -->
+      </div>
+    </section>
+
+    <!-- TAB 3: Guide -->
+    <section id="tab-guide" class="hidden">
+      <div class="card p-8" style="max-width: 800px; margin: 0 auto;">
+        <h2 style="color: var(--color-charcoal); font-size: 1.6rem; margin-bottom: 16px;">Understanding Classical Panchakarma</h2>
+        <p style="line-height: 1.7; color: var(--text-secondary); margin-bottom: 20px;">
+          Panchakarma (literally <em>"five actions"</em> in Sanskrit) is the cornerstone of Ayurvedic restorative medicine. It is not merely a relaxation massage, but a clinical metabolic and cellular purification protocol that removes accumulated toxins (<em>Ama</em>) and balances the Tridoshas (Vata, Pitta, Kapha).
+        </p>
+
+        <div class="grid grid-3 gap-4 mb-6">
+          <div class="card p-4" style="background: var(--color-green-50);">
+            <div class="font-bold text-primary mb-1">1. Purvakarma</div>
+            <div class="caption font-semibold mb-2">Preparation Phase</div>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5;">
+              Internal and external oleation (Snehana) with warm medicated ghee and herbal steam (Swedana) to loosen deep-seated toxins.
+            </p>
+          </div>
+          <div class="card p-4" style="background: var(--color-cream-100);">
+            <div class="font-bold text-primary mb-1">2. Pradhanakarma</div>
+            <div class="caption font-semibold mb-2">Main Cleansing</div>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5;">
+              The core therapeutic elimination procedures tailored to your Prakriti: Vamana, Virechana, Basti, Nasyam, or Raktamokshana.
+            </p>
+          </div>
+          <div class="card p-4" style="background: var(--color-teal-50);">
+            <div class="font-bold text-primary mb-1">3. Paschatkarma</div>
+            <div class="caption font-semibold mb-2">Post-Care & Rasayana</div>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5;">
+              Gradual reintroduction of diet (Samsarjana Krama), cell-nourishing rasayanas, yoga, and lifestyle maintenance guidelines.
+            </p>
+          </div>
+        </div>
+
+        <div class="card p-6" style="background: linear-gradient(135deg, var(--color-green-700), var(--color-teal-700)); color: white;">
+          <h3 style="color: white; margin-bottom: 8px;">Ready to consult a senior Vaidya?</h3>
+          <p style="font-size: 0.95rem; color: rgba(255,255,255,0.85); margin-bottom: 16px;">
+            Book an introductory online or in-person consultation to assess your Prakriti before finalizing dates.
+          </p>
+          <a href="/clinics.html?type=panchakarma" class="btn btn-accent btn-sm">Find Panchakarma Centers →</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container text-center">
+    <p>© 2026 Heal in India. Medical Tourism & Integrated Wellness Platform.</p>
+  </div>
+</footer>
+
+<script src="/js/app.js"></script>
+<script>
+  let allPackages = [];
+  let allTherapies = [];
+
+  async function loadData() {
+    try {
+      const [pkgs, therapies] = await Promise.all([
+        App.API.get('/treatments/packages'),
+        App.API.get('/treatments')
+      ]);
+      allPackages = pkgs || [];
+      allTherapies = therapies || [];
+
+      renderPackages(allPackages);
+      renderTherapies(allTherapies);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  function renderPackages(packages) {
+    const container = document.getElementById('packages-container');
+    container.innerHTML = packages.map(pkg => `
+      <article class="card p-6" style="border-top: 4px solid var(--primary); display:flex; flex-direction:column; justify-content:space-between;">
+        <div>
+          <div class="flex-between mb-3">
+            <span class="badge badge-teal">${pkg.duration_days} Days Full Program</span>
+            <span class="badge badge-green">${App.UI.getClinicTypeLabel(pkg.category)}</span>
+          </div>
+          <h3 style="font-size: 1.25rem; margin-bottom: 8px; color: var(--color-charcoal);">${pkg.name}</h3>
+          <p class="caption mb-3" style="color: var(--primary); font-weight:600;">📍 ${pkg.clinics?.name || 'Verified Partner'} — ${pkg.clinics?.city || 'India'}</p>
+          <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 16px;">
+            ${pkg.description}
+          </p>
+          <div class="mb-4">
+            <div class="font-semibold caption mb-2" style="color:var(--color-charcoal);">Key Inclusions:</div>
+            <ul style="margin:0; padding-left:18px; font-size:0.85rem; color:var(--text-secondary); line-height:1.6;">
+              ${(pkg.inclusions || []).map(inc => `<li>${inc}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+        <div class="pt-4 flex-between align-items:center" style="border-top: 1px solid var(--border-light);">
+          <div>
+            <span class="caption" style="display:block;">All-Inclusive Price</span>
+            <span style="font-size: 1.4rem; font-weight: 800; color: var(--color-saffron-700);">
+              ₹${Math.round(pkg.price).toLocaleString('en-IN')}
+            </span>
+          </div>
+          <a href="/booking.html?package=${pkg.id}&clinic=${pkg.clinic_id}" class="btn btn-primary btn-sm">
+            Book Package →
+          </a>
+        </div>
+      </article>
+    `).join('');
+  }
+
+  function renderTherapies(therapies) {
+    const container = document.getElementById('therapies-container');
+    container.innerHTML = therapies.map(t => `
+      <div class="card p-5">
+        <div class="badge badge-green mb-2">${App.UI.getClinicTypeLabel(t.category)}</div>
+        <h3 style="font-size: 1.1rem; margin-bottom: 6px;">${t.name}</h3>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 12px;">
+          ${t.description}
+        </p>
+        <div class="caption font-semibold mb-2">Key Clinical Benefits:</div>
+        <div class="flex gap-1 flex-wrap mb-4">
+          ${(t.benefits || []).map(b => `<span class="badge badge-gray" style="font-size:0.75rem;">✓ ${b}</span>`).join(' ')}
+        </div>
+        <div class="flex-between caption pt-3" style="border-top: 1px solid var(--border-light);">
+          <span>⏱️ ${t.duration_minutes || 60} mins</span>
+          <a href="/clinics.html?search=${encodeURIComponent(t.name.split(' ')[0])}" class="btn btn-ghost btn-sm" style="padding: 4px 8px;">Find Centers →</a>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Tabs handling
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('btn-primary', 'active');
+        b.classList.add('btn-ghost');
+      });
+      btn.classList.add('btn-primary', 'active');
+      btn.classList.remove('btn-ghost');
+
+      const target = btn.dataset.tab;
+      document.getElementById('tab-packages').classList.toggle('hidden', target !== 'packages');
+      document.getElementById('tab-therapies').classList.toggle('hidden', target !== 'therapies');
+      document.getElementById('tab-guide').classList.toggle('hidden', target !== 'guide');
+    });
+  });
+
+  // Package filter
+  document.getElementById('package-cat-filter')?.addEventListener('change', e => {
+    const cat = e.target.value;
+    const filtered = cat ? allPackages.filter(p => p.category === cat) : allPackages;
+    renderPackages(filtered);
+  });
+
+  document.addEventListener('DOMContentLoaded', loadData);
+</script>
+</body>
+</html>

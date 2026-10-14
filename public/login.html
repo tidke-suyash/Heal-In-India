@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — Heal in India</title>
+  <meta name="description" content="Sign in to your Heal in India account to manage appointments, wellness tourism plans, and health records.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body style="min-height: 100vh; display: flex; flex-direction: column; background: var(--color-cream-50);">
+
+<nav class="navbar" role="navigation">
+  <div class="container">
+    <div class="navbar-inner">
+      <a href="/" class="navbar-brand">
+        <div class="brand-logo" aria-hidden="true">🌿</div>
+        <span class="brand-name">Heal in India</span>
+      </a>
+      <div class="navbar-actions">
+        <a href="/signup.html" class="btn btn-outline btn-sm">Create Account</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main class="section flex-1" style="display: flex; align-items: center; justify-content: center; padding: 40px 16px;">
+  <div class="card p-8" style="width: 100%; max-width: 480px; box-shadow: var(--shadow-md);">
+    <div class="text-center mb-6">
+      <div style="font-size: 2.5rem; margin-bottom: 8px;">🌿</div>
+      <h1 style="font-size: 1.6rem; color: var(--color-charcoal); margin-bottom: 4px;">Welcome to Heal in India</h1>
+      <p class="caption">Sign in to your patient or healthcare provider portal</p>
+    </div>
+
+    <!-- 1-Click Demo Login Bar -->
+    <div class="card p-4 mb-6" style="background: var(--color-green-50); border: 1px solid var(--color-green-200);">
+      <div class="caption font-semibold text-primary mb-2">⚡ 1-Click Demo Login (Instant Access)</div>
+      <div class="grid grid-2 gap-2">
+        <button class="btn btn-sm btn-outline" style="background: white;" onclick="fillDemo('patient1@healinindia.com')">Priya (Patient)</button>
+        <button class="btn btn-sm btn-outline" style="background: white;" onclick="fillDemo('patient2@healinindia.com')">James (Tourist)</button>
+        <button class="btn btn-sm btn-outline" style="background: white;" onclick="fillDemo('clinic1@healinindia.com')">Kerala Hub (Clinic)</button>
+        <button class="btn btn-sm btn-outline" style="background: white;" onclick="fillDemo('admin@healinindia.com')">Admin Kumar</button>
+      </div>
+    </div>
+
+    <form id="login-form">
+      <div class="mb-4">
+        <label class="form-label" for="email">Email Address</label>
+        <input type="email" id="email" class="form-control" placeholder="name@example.com" required value="patient1@healinindia.com">
+      </div>
+
+      <div class="mb-6">
+        <div class="flex-between mb-1">
+          <label class="form-label" for="password" style="margin-bottom: 0;">Password</label>
+          <a href="#" class="caption" style="color: var(--primary);">Forgot?</a>
+        </div>
+        <input type="password" id="password" class="form-control" placeholder="••••••••" required value="demo12345">
+      </div>
+
+      <button type="submit" id="login-submit-btn" class="btn btn-primary btn-block btn-lg mb-4">
+        Sign In →
+      </button>
+
+      <div class="text-center caption">
+        Don't have an account? <a href="/signup.html" class="font-semibold" style="color: var(--primary);">Register here</a>
+      </div>
+    </form>
+  </div>
+</main>
+
+<footer class="footer" style="margin-top: auto; padding: 20px 0;">
+  <div class="container text-center caption">
+    <p>© 2026 Heal in India. Secure Healthcare Platform.</p>
+  </div>
+</footer>
+
+<div id="alert-container" style="position:fixed;top:80px;right:20px;z-index:500;display:flex;flex-direction:column;gap:8px;max-width:380px;"></div>
+
+<script src="/js/app.js"></script>
+<script>
+  function fillDemo(email) {
+    document.getElementById('email').value = email;
+    document.getElementById('password').value = 'demo12345';
+    document.getElementById('login-form').dispatchEvent(new Event('submit'));
+  }
+
+  document.getElementById('login-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const btn = document.getElementById('login-submit-btn');
+
+    App.UI.setButtonLoading(btn, true, 'Signing in...');
+
+    try {
+      const res = await App.API.post('/auth/login', { email, password });
+      App.Auth.save(res.user, res.session);
+
+      App.UI.showAlert('Signed in successfully!', 'success');
+      const params = new URLSearchParams(window.location.search);
+      const redirect = params.get('redirect') || '/dashboard.html';
+      setTimeout(() => window.location.href = redirect, 500);
+    } catch (err) {
+      App.UI.setButtonLoading(btn, false);
+      App.UI.showAlert(err.message || 'Login failed. Please check your credentials.', 'error');
+    }
+  });
+</script>
+</body>
+</html>

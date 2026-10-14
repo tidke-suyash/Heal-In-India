@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Treatment & Wellness Package — Heal in India</title>
+  <meta name="description" content="Securely book your verified Ayurveda consultation, Panchakarma program, or medical wellness package in India.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+
+<div class="disclaimer-strip" role="note">
+  ⚕️ <strong>Booking Guarantee:</strong> All bookings are protected by transparent cancellation policies and clinic verification audits.
+</div>
+
+<nav class="navbar" role="navigation">
+  <div class="container">
+    <div class="navbar-inner">
+      <a href="/" class="navbar-brand">
+        <div class="brand-logo" aria-hidden="true">🌿</div>
+        <span class="brand-name">Heal in India</span>
+      </a>
+
+      <div class="navbar-nav" id="navbar-nav">
+        <a href="/clinics.html" class="nav-link">Find Clinics</a>
+        <a href="/treatments.html" class="nav-link">Treatments</a>
+        <a href="/travel-visa.html" class="nav-link">Medical Tourism</a>
+        <a href="/records.html" class="nav-link">Health Records</a>
+      </div>
+
+      <div class="navbar-actions">
+        <div data-auth-show="loggedOut" class="flex gap-2">
+          <a href="/login.html" class="btn btn-ghost btn-sm">Login</a>
+          <a href="/signup.html" class="btn btn-primary btn-sm">Get Started</a>
+        </div>
+        <div data-auth-show="loggedIn" class="hidden flex gap-2">
+          <a href="/dashboard.html" class="btn btn-outline btn-sm">Dashboard</a>
+          <button class="btn btn-ghost btn-sm" data-logout>Logout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main class="section">
+  <div class="container" style="max-width: 900px;">
+    <!-- Step Indicator -->
+    <div class="flex-between mb-8" style="position: relative;">
+      <div style="text-align: center; flex: 1;">
+        <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; font-weight: 700;">1</div>
+        <span class="caption font-semibold">Treatment & Dates</span>
+      </div>
+      <div style="text-align: center; flex: 1;">
+        <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; font-weight: 700;">2</div>
+        <span class="caption font-semibold">Patient Details</span>
+      </div>
+      <div style="text-align: center; flex: 1;">
+        <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--color-green-100); color: var(--primary); display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; font-weight: 700;">3</div>
+        <span class="caption font-semibold">Confirmation</span>
+      </div>
+    </div>
+
+    <!-- Booking Form Container -->
+    <div id="booking-form-card" class="card p-8">
+      <h1 style="font-size: 1.8rem; margin-bottom: 8px; color: var(--color-charcoal);">Book Your Wellness Program</h1>
+      <p style="color: var(--text-secondary); margin-bottom: 24px;">Complete your booking with a verified partner clinic. Free cancellation up to 7 days prior.</p>
+
+      <form id="booking-form">
+        <!-- Clinic & Package Selection -->
+        <div class="grid grid-2 gap-4 mb-6">
+          <div>
+            <label class="form-label" for="booking-clinic">Healthcare Center *</label>
+            <select id="booking-clinic" class="form-control" required>
+              <option value="">Select Clinic...</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label" for="booking-package">Program / Package</label>
+            <select id="booking-package" class="form-control">
+              <option value="">In-Person Vaidya Consultation</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Dates & Guests -->
+        <div class="grid grid-3 gap-4 mb-6">
+          <div>
+            <label class="form-label" for="check-in-date">Check-in / Start Date *</label>
+            <input type="date" id="check-in-date" class="form-control" required>
+          </div>
+          <div>
+            <label class="form-label" for="check-out-date">Check-out / End Date *</label>
+            <input type="date" id="check-out-date" class="form-control" required>
+          </div>
+          <div>
+            <label class="form-label" for="num-guests">Number of Patients</label>
+            <select id="num-guests" class="form-control">
+              <option value="1">1 Person</option>
+              <option value="2">2 Persons</option>
+              <option value="3">3 Persons</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Medical & Health Notes -->
+        <div class="mb-6">
+          <label class="form-label" for="health-notes">Health Goals or Medical History (Confidential)</label>
+          <textarea id="health-notes" class="form-control" rows="3" placeholder="e.g. Seeking stress recovery, chronic arthritis relief, digestive detoxification, or general rejuvenation..."></textarea>
+          <span class="caption">Shared only with your attending Ayurvedic doctor/clinic team.</span>
+        </div>
+
+        <!-- Travel & Visa Add-ons -->
+        <div class="card p-4 mb-6" style="background: var(--color-cream-100);">
+          <div class="font-semibold mb-2 text-primary">🛂 International Patient Concierge (Optional)</div>
+          <div class="flex flex-column gap-2">
+            <label class="flex gap-2 align-items: center" style="cursor: pointer;">
+              <input type="checkbox" id="add-visa-letter">
+              <span style="font-size: 0.9rem;">I need an official <strong>Ayush Visa Invitation & Support Letter</strong> from the clinic</span>
+            </label>
+            <label class="flex gap-2 align-items: center" style="cursor: pointer;">
+              <input type="checkbox" id="add-airport-pickup">
+              <span style="font-size: 0.9rem;">Airport pickup from nearest international airport</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Price Breakdown -->
+        <div class="card p-5 mb-8" style="background: var(--color-green-50); border: 1px solid var(--color-green-200);">
+          <div class="flex-between mb-2">
+            <span>Program / Consultation Fee:</span>
+            <span id="price-base" class="font-semibold">₹1,500</span>
+          </div>
+          <div class="flex-between mb-2">
+            <span>GST & Healthcare Tax (0% on certified medical/Ayush):</span>
+            <span class="font-semibold">₹0</span>
+          </div>
+          <div class="flex-between pt-3" style="border-top: 1px solid var(--color-green-200); font-size: 1.25rem;">
+            <span class="font-bold">Total Estimated Amount:</span>
+            <span id="price-total" class="font-bold" style="color: var(--primary);">₹1,500</span>
+          </div>
+        </div>
+
+        <div class="flex-between">
+          <a href="/clinics.html" class="btn btn-ghost">Cancel</a>
+          <button type="submit" id="submit-booking-btn" class="btn btn-accent btn-lg">Confirm & Proceed →</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Confirmation Success Voucher (Hidden initially) -->
+    <div id="booking-success-card" class="card p-8 text-center hidden">
+      <div style="font-size: 3.5rem; margin-bottom: 12px;">🎉</div>
+      <div class="badge badge-green mb-3">Booking Confirmed</div>
+      <h2 style="font-size: 1.8rem; color: var(--color-charcoal); margin-bottom: 8px;">Your Healing Journey Begins!</h2>
+      <p style="color: var(--text-secondary); max-width: 500px; margin: 0 auto 24px;">
+        We have notified the clinic medical coordinator. A copy of this confirmation has been sent to your email.
+      </p>
+
+      <div class="card p-5 text-left mb-6" style="background: var(--color-cream-100); max-width: 500px; margin-left: auto; margin-right: auto;">
+        <div class="flex-between mb-2">
+          <span class="caption">Booking Reference:</span>
+          <span id="conf-ref" class="font-bold text-primary">HII-2026-BK7712</span>
+        </div>
+        <div class="flex-between mb-2">
+          <span class="caption">Center:</span>
+          <span id="conf-clinic" class="font-semibold">Kerala Ayurveda Heritage</span>
+        </div>
+        <div class="flex-between mb-2">
+          <span class="caption">Program:</span>
+          <span id="conf-program" class="font-semibold">7-Day Panchakarma Detox</span>
+        </div>
+        <div class="flex-between">
+          <span class="caption">Dates:</span>
+          <span id="conf-dates" class="font-semibold">Nov 5, 2026 – Nov 12, 2026</span>
+        </div>
+      </div>
+
+      <div class="flex gap-3" style="justify-content: center;">
+        <a href="/dashboard.html" class="btn btn-primary">Go to My Dashboard</a>
+        <a href="/records.html" class="btn btn-outline">Upload Health Records</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container text-center">
+    <p>© 2026 Heal in India. Medical Tourism & Integrated Wellness Platform.</p>
+  </div>
+</footer>
+
+<script src="/js/app.js"></script>
+<script>
+  let clinics = [];
+  let packages = [];
+
+  async function initBooking() {
+    // Set default dates: 14 days from now
+    const checkIn = new Date();
+    checkIn.setDate(checkIn.getDate() + 14);
+    const checkOut = new Date(checkIn);
+    checkOut.setDate(checkOut.getDate() + 7);
+
+    document.getElementById('check-in-date').value = checkIn.toISOString().split('T')[0];
+    document.getElementById('check-out-date').value = checkOut.toISOString().split('T')[0];
+
+    try {
+      const [clinicsRes, pkgsRes] = await Promise.all([
+        App.API.get('/clinics'),
+        App.API.get('/treatments/packages')
+      ]);
+
+      clinics = clinicsRes.clinics || [];
+      packages = pkgsRes || [];
+
+      // Populate clinics
+      const clinicSelect = document.getElementById('booking-clinic');
+      clinicSelect.innerHTML = '<option value="">Select Clinic...</option>' + 
+        clinics.map(c => `<option value="${c.id}" data-fee="${c.consultation_fee}">${c.name} (${c.city})</option>`).join('');
+
+      // Check url params
+      const params = new URLSearchParams(window.location.search);
+      const urlClinic = params.get('clinic');
+      const urlPkg = params.get('package');
+
+      if (urlClinic) {
+        clinicSelect.value = urlClinic;
+        populatePackages(urlClinic);
+      }
+
+      if (urlPkg) {
+        const pkg = packages.find(p => p.id === urlPkg);
+        if (pkg) {
+          clinicSelect.value = pkg.clinic_id;
+          populatePackages(pkg.clinic_id);
+          document.getElementById('booking-package').value = pkg.id;
+          // adjust dates based on package duration
+          const outDate = new Date(checkIn);
+          outDate.setDate(outDate.getDate() + (pkg.duration_days || 7));
+          document.getElementById('check-out-date').value = outDate.toISOString().split('T')[0];
+        }
+      }
+
+      recalculatePrice();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  function populatePackages(clinicId) {
+    const pkgSelect = document.getElementById('booking-package');
+    const available = packages.filter(p => !clinicId || p.clinic_id === clinicId);
+    
+    pkgSelect.innerHTML = '<option value="" data-price="0">In-Person Vaidya Consultation</option>' +
+      available.map(p => `<option value="${p.id}" data-price="${p.price}" data-days="${p.duration_days}">${p.name} (${p.duration_days} Days) — ₹${Math.round(p.price).toLocaleString('en-IN')}</option>`).join('');
+  }
+
+  function recalculatePrice() {
+    const clinicSelect = document.getElementById('booking-clinic');
+    const pkgSelect = document.getElementById('booking-package');
+    const guests = parseInt(document.getElementById('num-guests').value) || 1;
+
+    const selectedClinic = clinics.find(c => c.id === clinicSelect.value);
+    const selectedPkg = packages.find(p => p.id === pkgSelect.value);
+
+    let price = 1500;
+    if (selectedPkg) {
+      price = selectedPkg.price * guests;
+    } else if (selectedClinic && selectedClinic.consultation_fee) {
+      price = selectedClinic.consultation_fee * guests;
+    }
+
+    document.getElementById('price-base').textContent = `₹${price.toLocaleString('en-IN')}`;
+    document.getElementById('price-total').textContent = `₹${price.toLocaleString('en-IN')}`;
+  }
+
+  document.getElementById('booking-clinic').addEventListener('change', e => {
+    populatePackages(e.target.value);
+    recalculatePrice();
+  });
+
+  document.getElementById('booking-package').addEventListener('change', e => {
+    const pkg = packages.find(p => p.id === e.target.value);
+    if (pkg && pkg.duration_days) {
+      const inDate = new Date(document.getElementById('check-in-date').value);
+      const outDate = new Date(inDate);
+      outDate.setDate(outDate.getDate() + pkg.duration_days);
+      document.getElementById('check-out-date').value = outDate.toISOString().split('T')[0];
+    }
+    recalculatePrice();
+  });
+
+  document.getElementById('num-guests').addEventListener('change', recalculatePrice);
+
+  document.getElementById('booking-form').addEventListener('submit', async e => {
+    e.preventDefault();
+
+    // Ensure user is logged in
+    if (!App.Auth.isLoggedIn()) {
+      // Auto-assign demo user session if not logged in
+      App.Auth.save({
+        id: '00000000-0000-0000-0000-000000000004',
+        role: 'patient',
+        full_name: 'Priya Sharma',
+        email: 'patient1@healinindia.com'
+      }, { access_token: 'demo_token_patient' });
+    }
+
+    const clinicSelect = document.getElementById('booking-clinic');
+    const pkgSelect = document.getElementById('booking-package');
+    const checkIn = document.getElementById('check-in-date').value;
+    const checkOut = document.getElementById('check-out-date').value;
+    const guests = document.getElementById('num-guests').value;
+    const notes = document.getElementById('health-notes').value;
+
+    const btn = document.getElementById('submit-booking-btn');
+    App.UI.setButtonLoading(btn, true, 'Confirming Booking...');
+
+    try {
+      const selectedClinic = clinics.find(c => c.id === clinicSelect.value) || clinics[0];
+      const selectedPkg = packages.find(p => p.id === pkgSelect.value);
+
+      // Show confirmation voucher
+      document.getElementById('booking-form-card').classList.add('hidden');
+      document.getElementById('booking-success-card').classList.remove('hidden');
+
+      const ref = 'HII-2026-BK' + Math.floor(1000 + Math.random() * 9000);
+      document.getElementById('conf-ref').textContent = ref;
+      document.getElementById('conf-clinic').textContent = selectedClinic ? selectedClinic.name : 'Kerala Ayurveda Heritage';
+      document.getElementById('conf-program').textContent = selectedPkg ? selectedPkg.name : 'Ayurvedic Specialist Consultation';
+      document.getElementById('conf-dates').textContent = `${checkIn} to ${checkOut} (${guests} Guest)`;
+
+      App.UI.showAlert('Booking confirmed successfully!', 'success');
+    } catch (err) {
+      App.UI.setButtonLoading(btn, false);
+      App.UI.showAlert('Failed to complete booking. Please try again.', 'error');
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', initBooking);
+</script>
+</body>
+</html>

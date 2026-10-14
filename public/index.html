@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Heal in India — Verified Ayurveda, Panchakarma & Modern Healthcare</title>
+  <meta name="description" content="India's trusted platform for verified Ayurveda, Panchakarma, wellness retreats, and modern medical centers. Book treatments, manage health records, and plan medical tourism with expert guidance.">
+  <meta name="keywords" content="Ayurveda India, Panchakarma, medical tourism India, Ayush visa, wellness retreat, Ayurvedic hospital, Kerala Ayurveda">
+  <meta property="og:title" content="Heal in India — Integrated Healthcare & Wellness Tourism">
+  <meta property="og:description" content="Connect with verified Ayurveda, Panchakarma & modern medical centers across India.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+  <link rel="stylesheet" href="/css/styles.css">
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <!-- App config (server renders this or it reads from env) -->
+  <script>
+    window.APP_CONFIG = {
+      SUPABASE_URL: '',  // Set via server-side injection or .env
+      SUPABASE_ANON_KEY: ''
+    };
+  </script>
+</head>
+<body>
+
+<!-- ============================================================
+   MEDICAL DISCLAIMER STRIP
+   ============================================================ -->
+<div class="disclaimer-strip" role="note">
+  ⚕️ <strong>Medical Disclaimer:</strong> This platform facilitates healthcare discovery and booking. It does not provide medical advice. Always consult a qualified healthcare professional.
+  <a href="/terms.html" style="color: var(--color-saffron-700); margin-left: 8px;">Learn More</a>
+</div>
+
+<!-- ============================================================
+   NAVIGATION
+   ============================================================ -->
+<nav class="navbar" role="navigation" aria-label="Main navigation">
+  <div class="container">
+    <div class="navbar-inner">
+      <a href="/" class="navbar-brand" aria-label="Heal in India Home">
+        <div class="brand-logo" aria-hidden="true">🌿</div>
+        <span class="brand-name">Heal in India</span>
+      </a>
+
+      <div class="navbar-nav" id="navbar-nav" role="menubar">
+        <a href="/clinics.html" class="nav-link" role="menuitem">Find Clinics</a>
+        <a href="/treatments.html" class="nav-link" role="menuitem">Treatments</a>
+        <a href="/travel-visa.html" class="nav-link" role="menuitem">Medical Tourism</a>
+        <a href="#how-it-works" class="nav-link" role="menuitem">How It Works</a>
+      </div>
+
+      <div class="navbar-actions">
+        <button class="notif-btn hidden" id="notif-btn" data-auth-show="loggedIn" aria-label="Notifications">
+          🔔
+          <span class="notif-badge hidden" id="notif-badge">0</span>
+        </button>
+
+        <div data-auth-show="loggedOut" class="flex gap-2">
+          <a href="/login.html" class="btn btn-ghost btn-sm" id="nav-login-btn">Login</a>
+          <a href="/signup.html" class="btn btn-primary btn-sm" id="nav-signup-btn">Get Started</a>
+        </div>
+
+        <div data-auth-show="loggedIn" class="hidden flex gap-2">
+          <a href="/dashboard.html" class="btn btn-outline btn-sm" id="nav-dashboard-btn">
+            <span data-user-name></span>'s Dashboard
+          </a>
+          <button class="btn btn-ghost btn-sm" data-logout id="nav-logout-btn">Logout</button>
+        </div>
+
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================================================
+   HERO SECTION
+   ============================================================ -->
+<section class="hero" aria-labelledby="hero-heading">
+  <div class="hero-pattern" aria-hidden="true"></div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="hero-eyebrow">
+          <span>✓</span> India's Verified Healthcare & Wellness Platform
+        </div>
+        <h1 class="hero-title" id="hero-heading">
+          Verified Ayurveda, Panchakarma &<br>
+          <span class="accent">Modern Healthcare</span> — One Platform.
+        </h1>
+        <p class="hero-subtitle">
+          Discover authenticated traditional and modern medical centers across India.
+          Book multi-day wellness programs, manage your health records, and plan
+          medical tourism — all in one trusted platform.
+        </p>
+
+        <!-- Hero Search -->
+        <div class="search-bar" role="search" aria-label="Search clinics and treatments">
+          <input
+            type="search"
+            class="search-bar-input"
+            id="hero-search"
+            placeholder="Search by city, treatment, or clinic name..."
+            aria-label="Search query"
+            autocomplete="off"
+          >
+          <button class="btn btn-primary search-bar-btn" id="hero-search-btn" aria-label="Search">
+            🔍 Search
+          </button>
+        </div>
+
+        <div class="hero-actions" style="margin-top: var(--space-6);">
+          <a href="/clinics.html" class="btn btn-accent btn-lg" id="hero-find-clinics-btn">Find Clinics Near You</a>
+          <a href="/travel-visa.html" class="btn btn-outline btn-lg" id="hero-travel-btn" style="color: white; border-color: rgba(255,255,255,0.4);">
+            ✈️ Medical Tourism
+          </a>
+        </div>
+
+        <div class="hero-trust">
+          <div class="trust-item"><span class="icon">✓</span> Verified Providers</div>
+          <div class="trust-item"><span class="icon">🔒</span> Secure Health Records</div>
+          <div class="trust-item"><span class="icon">💰</span> Transparent Pricing</div>
+          <div class="trust-item"><span class="icon">✈️</span> International Support</div>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="hero-card-stack">
+          <div class="hero-stat-card featured">
+            <div style="font-size: 2.5rem; margin-bottom: 8px;">🌿</div>
+            <div class="hero-stat-number">500+</div>
+            <div class="hero-stat-label">Verified Clinics & Wellness Centers</div>
+          </div>
+          <div class="hero-stat-card">
+            <div class="hero-stat-number">50+</div>
+            <div class="hero-stat-label">Treatment Types</div>
+          </div>
+          <div class="hero-stat-card">
+            <div class="hero-stat-number">15+</div>
+            <div class="hero-stat-label">States Covered</div>
+          </div>
+          <div class="hero-stat-card">
+            <div class="hero-stat-number">30+</div>
+            <div class="hero-stat-label">Countries Served</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+   CATEGORIES
+   ============================================================ -->
+<section class="section" id="categories" aria-labelledby="categories-heading">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Explore By Category</div>
+      <h2 class="section-title" id="categories-heading">Every Path to Healing, One Platform</h2>
+      <p class="section-subtitle">From ancient Ayurveda traditions to modern diagnostics — discover the complete spectrum of healthcare across India.</p>
+    </div>
+
+    <div class="grid grid-3 gap-6" id="categories-grid">
+      <div class="category-card" onclick="browseCategory('ayurveda')" tabindex="0" role="button" aria-label="Browse Ayurveda clinics">
+        <div class="category-icon">🌿</div>
+        <h3 class="title">Ayurveda</h3>
+        <p class="body-sm text-secondary-color" style="margin-top: 6px;">India's 5,000-year healing science. Herbal treatments, oil therapies, and personalized care based on your Prakriti.</p>
+        <div class="mt-4"><span class="badge badge-green">Traditional</span></div>
+      </div>
+
+      <div class="category-card" onclick="browseCategory('panchakarma')" tabindex="0" role="button" aria-label="Browse Panchakarma centers">
+        <div class="category-icon">💫</div>
+        <h3 class="title">Panchakarma</h3>
+        <p class="body-sm text-secondary-color" style="margin-top: 6px;">Deep cellular detoxification and rejuvenation through Ayurveda's most powerful 5-action cleansing protocol.</p>
+        <div class="mt-4"><span class="badge badge-teal">Detox & Cleanse</span></div>
+      </div>
+
+      <div class="category-card" onclick="browseCategory('modern_medicine')" tabindex="0" role="button" aria-label="Browse modern medicine hospitals">
+        <div class="category-icon">🏥</div>
+        <h3 class="title">Modern Medicine</h3>
+        <p class="body-sm text-secondary-color" style="margin-top: 6px;">NABH-accredited hospitals, specialist consultations, and evidence-based treatments with world-class infrastructure.</p>
+        <div class="mt-4"><span class="badge badge-saffron">Clinical Care</span></div>
+      </div>
+
+      <div class="category-card" onclick="browseCategory('wellness_retreat')" tabindex="0" role="button" aria-label="Browse wellness retreats">
+        <div class="category-icon">🧘</div>
+        <h3 class="title">Wellness Retreats</h3>
+        <p class="body-sm text-secondary-color" style="margin-top: 6px;">Yoga, meditation, naturopathy, and lifestyle transformation programs in India's most serene locations.</p>
+        <div class="mt-4"><span class="badge badge-green">Mind & Body</span></div>
+      </div>
+
+      <div class="category-card" onclick="browseCategory('diagnostics')" tabindex="0" role="button" aria-label="Browse diagnostic centers">
+        <div class="category-icon">🔬</div>
+        <h3 class="title">Diagnostics</h3>
+        <p class="body-sm text-secondary-color" style="margin-top: 6px;">NABL-accredited diagnostic labs, health checkup packages, and preventive screening programs across India.</p>
+        <div class="mt-4"><span class="badge badge-sand">Preventive Health</span></div>
+      </div>
+
+      <div class="category-card" onclick="browseCategory('integrated')" tabindex="0" role="button" aria-label="Browse integrated care centers">
+        <div class="category-icon">⚕️</div>
+        <h3 class="title">Integrated Care</h3>
+        <p class="body-sm text-secondary-color" style="margin-top: 6px;">The best of both worlds — clinics that blend Ayurveda, modern medicine, and wellness for holistic outcomes.</p>
+        <div class="mt-4"><span class="badge badge-teal">Holistic</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+   FEATURED CLINICS
+   ============================================================ -->
+<section class="section" style="background: var(--color-gray-50);" id="featured-clinics" aria-labelledby="featured-clinics-heading">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Top Rated</div>
+      <h2 class="section-title" id="featured-clinics-heading">Featured Verified Clinics</h2>
+      <p class="section-subtitle">Our most trusted and highly-rated providers across India's top wellness destinations.</p>
+    </div>
+
+    <div class="grid grid-auto gap-6" id="clinics-grid" aria-live="polite" aria-label="Featured clinics">
+      <!-- Skeleton loaders -->
+      <div class="card" id="skeleton-1">
+        <div class="skeleton" style="height: 200px;"></div>
+        <div class="card-body">
+          <div class="skeleton" style="height: 20px; width: 70%; margin-bottom: 12px;"></div>
+          <div class="skeleton" style="height: 16px; width: 50%;"></div>
+        </div>
+      </div>
+      <div class="card" id="skeleton-2">
+        <div class="skeleton" style="height: 200px;"></div>
+        <div class="card-body">
+          <div class="skeleton" style="height: 20px; width: 70%; margin-bottom: 12px;"></div>
+          <div class="skeleton" style="height: 16px; width: 50%;"></div>
+        </div>
+      </div>
+      <div class="card" id="skeleton-3">
+        <div class="skeleton" style="height: 200px;"></div>
+        <div class="card-body">
+          <div class="skeleton" style="height: 20px; width: 70%; margin-bottom: 12px;"></div>
+          <div class="skeleton" style="height: 16px; width: 50%;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-8">
+      <a href="/clinics.html" class="btn btn-outline btn-lg" id="view-all-clinics-btn">View All Clinics →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+   HOW IT WORKS
+   ============================================================ -->
+<section class="section" id="how-it-works" aria-labelledby="how-it-works-heading">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Simple Process</div>
+      <h2 class="section-title" id="how-it-works-heading">Your Healing Journey in 4 Steps</h2>
+      <p class="section-subtitle">From discovery to booking to recovery — we guide you every step of the way.</p>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h3 class="step-title">Discover & Compare</h3>
+        <p class="step-desc">Search verified clinics by location, treatment type, specialty, language, and budget. Read authentic reviews.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h3 class="step-title">Choose Your Package</h3>
+        <p class="step-desc">Select from curated multi-day therapy packages, consultations, or wellness programs that fit your goals.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h3 class="step-title">Book Securely</h3>
+        <p class="step-desc">Book online with secure payment. Add health notes, request special accommodations, and get instant confirmation.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">4</div>
+        <h3 class="step-title">Heal & Track</h3>
+        <p class="step-desc">Manage your health records, treatment history, and ongoing care all in your personal health dashboard.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+   FEATURED PACKAGES
+   ============================================================ -->
+<section class="section" style="background: linear-gradient(160deg, var(--color-green-900), var(--color-green-800));" id="packages" aria-labelledby="packages-heading">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow" style="color: var(--color-teal-500);">Multi-Day Programs</div>
+      <h2 class="section-title" style="color: white;" id="packages-heading">Popular Treatment Packages</h2>
+      <p class="section-subtitle" style="color: rgba(255,255,255,0.7);">Curated multi-day healing programs designed for deep transformation.</p>
+    </div>
+
+    <div class="grid grid-auto gap-6" id="packages-grid">
+      <!-- Populated by JS -->
+    </div>
+
+    <div class="text-center mt-8">
+      <a href="/treatments.html" class="btn btn-accent btn-lg" id="view-all-packages-btn">Explore All Packages →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+   MEDICAL TOURISM CTA
+   ============================================================ -->
+<section class="section" style="background: linear-gradient(135deg, var(--color-teal-50), var(--color-green-50));" aria-labelledby="tourism-cta-heading">
+  <div class="container">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-12); align-items: center;">
+      <div>
+        <div class="section-eyebrow">International Patients</div>
+        <h2 class="section-title" id="tourism-cta-heading">Planning Medical Tourism to India?</h2>
+        <p class="body-lg text-secondary-color" style="margin-bottom: var(--space-6);">
+          We guide international patients through every step — from choosing the right clinic to Ayush Visa assistance, treatment planning, and local support.
+        </p>
+        <div class="flex gap-4 flex-wrap">
+          <a href="/travel-visa.html" class="btn btn-primary btn-lg" id="tourism-cta-btn">Start Your Journey →</a>
+          <a href="/clinics.html?lang=en" class="btn btn-outline btn-lg" id="find-intl-clinic-btn">Find English-Friendly Clinics</a>
+        </div>
+      </div>
+      <div class="grid grid-2 gap-4" style="padding: var(--space-4);">
+        <div class="card p-6 text-center">
+          <div style="font-size: 2rem; margin-bottom: var(--space-3);">🛂</div>
+          <div class="title" style="font-size: 1rem;">Ayush Visa Guidance</div>
+          <div class="caption mt-4">Step-by-step visa workflow</div>
+        </div>
+        <div class="card p-6 text-center">
+          <div style="font-size: 2rem; margin-bottom: var(--space-3);">📋</div>
+          <div class="title" style="font-size: 1rem;">Treatment Planning</div>
+          <div class="caption mt-4">Personalized itinerary</div>
+        </div>
+        <div class="card p-6 text-center">
+          <div style="font-size: 2rem; margin-bottom: var(--space-3);">📨</div>
+          <div class="title" style="font-size: 1rem;">Invitation Letter</div>
+          <div class="caption mt-4">Clinic-issued support letters</div>
+        </div>
+        <div class="card p-6 text-center">
+          <div style="font-size: 2rem; margin-bottom: var(--space-3);">🌐</div>
+          <div class="title" style="font-size: 1rem;">Multilingual</div>
+          <div class="caption mt-4">Support in 8+ languages</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+   TESTIMONIALS
+   ============================================================ -->
+<section class="section" aria-labelledby="testimonials-heading">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Real Stories</div>
+      <h2 class="section-title" id="testimonials-heading">Healing Journeys That Transformed Lives</h2>
+    </div>
+
+    <div class="grid grid-3 gap-6" id="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="rating mb-4">
+          <div class="stars">★★★★★</div>
+        </div>
+        <blockquote class="testimonial-text">
+          "I came with chronic fatigue and left feeling 20 years younger. The Vaidya's knowledge was profound and treatments were done with such care. The food was delicious and healing. Life-changing Panchakarma!"
+        </blockquote>
+        <div class="testimonial-author">
+          <div class="avatar" aria-hidden="true">P</div>
+          <div>
+            <div class="font-semibold" style="font-size: 0.9rem;">Priya Sharma</div>
+            <div class="caption">Mumbai | Panchakarma Package at Kerala Ayurveda Heritage</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="rating mb-4">
+          <div class="stars">★★★★★</div>
+        </div>
+        <blockquote class="testimonial-text">
+          "As an international patient from the US, I was nervous about medical tourism in India. The team guided me through everything — Ayush Visa, clinic selection, accommodation. Absolutely seamless!"
+        </blockquote>
+        <div class="testimonial-author">
+          <div class="avatar" aria-hidden="true">J</div>
+          <div>
+            <div class="font-semibold" style="font-size: 0.9rem;">James Anderson</div>
+            <div class="caption">New York, USA | Wellness Retreat at Rishikesh Divine</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="rating mb-4">
+          <div class="stars">★★★★★</div>
+        </div>
+        <blockquote class="testimonial-text">
+          "The platform made it so easy to compare clinics, check verified credentials, and book a 14-day program. The health record sharing feature meant my new clinic already had my medical history ready."
+        </blockquote>
+        <div class="testimonial-author">
+          <div class="avatar" aria-hidden="true">A</div>
+          <div>
+            <div class="font-semibold" style="font-size: 0.9rem;">Amelia Patel</div>
+            <div class="caption">London, UK | Ayurveda Rejuvenation at Goa Beach Retreat</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+   TRUST SIGNALS
+   ============================================================ -->
+<section class="section-sm" style="background: var(--color-green-50); border-top: 1px solid var(--color-green-100);">
+  <div class="container">
+    <div style="display: flex; justify-content: center; align-items: center; gap: var(--space-12); flex-wrap: wrap;">
+      <div class="text-center">
+        <div style="font-size: 2rem; margin-bottom: 6px;">🏛️</div>
+        <div class="label text-primary-color">AYUSH Ministry</div>
+        <div class="caption">Aligned Guidelines</div>
+      </div>
+      <div class="text-center">
+        <div style="font-size: 2rem; margin-bottom: 6px;">🔒</div>
+        <div class="label text-primary-color">Security by Design</div>
+        <div class="caption">Future HIPAA-aligned</div>
+      </div>
+      <div class="text-center">
+        <div style="font-size: 2rem; margin-bottom: 6px;">✓</div>
+        <div class="label text-primary-color">Manual Verification</div>
+        <div class="caption">Every clinic reviewed</div>
+      </div>
+      <div class="text-center">
+        <div style="font-size: 2rem; margin-bottom: 6px;">💳</div>
+        <div class="label text-primary-color">Secure Payments</div>
+        <div class="caption">Razorpay powered</div>
+      </div>
+      <div class="text-center">
+        <div style="font-size: 2rem; margin-bottom: 6px;">🤖</div>
+        <div class="label text-primary-color">AI Health Navigator</div>
+        <div class="caption">Gemini-powered guidance</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+   CTA SECTION
+   ============================================================ -->
+<section class="section" style="background: linear-gradient(135deg, var(--color-green-700), var(--color-teal-700));" aria-labelledby="cta-heading">
+  <div class="container text-center">
+    <h2 class="section-title" style="color: white; max-width: 600px; margin: 0 auto var(--space-4);" id="cta-heading">
+      Begin Your Healing Journey Today
+    </h2>
+    <p style="color: rgba(255,255,255,0.8); font-size: 1.1rem; margin-bottom: var(--space-8); max-width: 500px; margin-left: auto; margin-right: auto;">
+      Join thousands of patients who've found verified, authentic healthcare through Heal in India.
+    </p>
+    <div class="flex gap-4 flex-wrap" style="justify-content: center;">
+      <a href="/signup.html" class="btn btn-accent btn-xl" id="cta-signup-btn" data-auth-show="loggedOut">Create Free Account →</a>
+      <a href="/dashboard.html" class="btn btn-xl hidden" data-auth-show="loggedIn" style="background: white; color: var(--primary);">Go to Dashboard →</a>
+      <a href="/clinics.html" class="btn btn-xl" style="background: transparent; color: white; border-color: rgba(255,255,255,0.5);">Browse Clinics</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+   FOOTER
+   ============================================================ -->
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-brand-name">🌿 Heal in India</div>
+        <p class="footer-desc">India's integrated healthcare and medical wellness tourism platform. Connecting patients with verified Ayurveda, Panchakarma, and modern medical centers.</p>
+        <div class="flex gap-3">
+          <a href="#" class="btn btn-ghost btn-sm" style="color: rgba(255,255,255,0.6);">Twitter</a>
+          <a href="#" class="btn btn-ghost btn-sm" style="color: rgba(255,255,255,0.6);">LinkedIn</a>
+          <a href="#" class="btn btn-ghost btn-sm" style="color: rgba(255,255,255,0.6);">Instagram</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-heading">Platform</div>
+        <nav class="footer-links" aria-label="Platform links">
+          <a href="/clinics.html" class="footer-link">Find Clinics</a>
+          <a href="/treatments.html" class="footer-link">Treatments</a>
+          <a href="/travel-visa.html" class="footer-link">Medical Tourism</a>
+          <a href="/records.html" class="footer-link">Health Records</a>
+        </nav>
+      </div>
+
+      <div>
+        <div class="footer-heading">For Providers</div>
+        <nav class="footer-links" aria-label="Provider links">
+          <a href="/signup.html?role=clinic" class="footer-link">Register Clinic</a>
+          <a href="/signup.html?role=practitioner" class="footer-link">Join as Practitioner</a>
+          <a href="/admin.html" class="footer-link">Admin Login</a>
+        </nav>
+      </div>
+
+      <div>
+        <div class="footer-heading">Legal</div>
+        <nav class="footer-links" aria-label="Legal links">
+          <a href="/privacy.html" class="footer-link">Privacy Policy</a>
+          <a href="/terms.html" class="footer-link">Terms of Service</a>
+          <a href="/medical-disclaimer.html" class="footer-link">Medical Disclaimer</a>
+        </nav>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p style="font-size: 0.85rem;">© 2026 Heal in India. All rights reserved.</p>
+      <p style="font-size: 0.85rem;">Made with 🌿 in India</p>
+    </div>
+    <div class="footer-disclaimer">
+      ⚕️ <strong>Medical Disclaimer:</strong> Heal in India is an information and booking platform. It does not provide medical advice, diagnosis, or treatment. Content is for informational purposes only. The platform is not accredited under HIPAA, ISO 27001, or NABH at this time, but follows security-by-design principles aligned with future certification goals. Always seek the advice of your physician or qualified healthcare provider.
+      <br>🛂 <strong>Visa Disclaimer:</strong> We provide general guidance only. Visa decisions are made solely by the Government of India. We do not issue, guarantee, or facilitate visas.
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+   AI CHAT WIDGET
+   ============================================================ -->
+<button class="ai-chat-trigger" id="ai-chat-trigger" aria-label="Open AI Health Navigator">🤖</button>
+
+<div class="ai-chat-panel hidden" id="ai-chat-panel" role="dialog" aria-label="AI Health Navigator" aria-modal="true">
+  <div class="chat-header">
+    <div class="flex gap-3 align-items: center">
+      <div style="font-size: 1.25rem;">🤖</div>
+      <div>
+        <div style="font-weight: 700; font-size: 0.9rem;">AI Health Navigator</div>
+        <div style="font-size: 0.72rem; opacity: 0.8;">Powered by Gemini • Not a doctor</div>
+      </div>
+    </div>
+    <button class="modal-close" id="ai-chat-close" style="color: rgba(255,255,255,0.7);" aria-label="Close chat">✕</button>
+  </div>
+  <div class="chat-messages" id="ai-chat-messages" role="log" aria-live="polite" aria-label="Chat messages"></div>
+  <div class="chat-input-area">
+    <input
+      type="text"
+      class="chat-input"
+      id="ai-chat-input"
+      placeholder="Ask about treatments, clinics, visa..."
+      aria-label="Type your message"
+      maxlength="500"
+    >
+    <button class="btn btn-primary btn-sm chat-send-btn" id="ai-chat-send" aria-label="Send message">→</button>
+  </div>
+</div>
+
+<!-- Cookie Consent -->
+<div id="cookie-banner" class="hidden" style="position:fixed;bottom:0;left:0;right:0;background:var(--color-charcoal);color:white;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;z-index:300;flex-wrap:wrap;">
+  <p style="font-size:0.85rem;margin:0;">🍪 We use essential cookies to provide our services. <a href="/privacy.html" style="color:var(--color-teal-500);">Privacy Policy</a></p>
+  <button class="btn btn-accent btn-sm" id="cookie-accept">Accept & Continue</button>
+</div>
+
+<div id="alert-container" style="position:fixed;top:80px;right:20px;z-index:500;display:flex;flex-direction:column;gap:8px;max-width:380px;"></div>
+
+<script src="/js/app.js"></script>
+<script>
+  // ---- Load featured clinics ----
+  async function loadFeaturedClinics() {
+    try {
+      const clinics = await App.API.get('/clinics/featured');
+      const grid = document.getElementById('clinics-grid');
+      if (!clinics || clinics.length === 0) {
+        grid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🌿</div><p class="empty-state-title">Clinics Coming Soon</p><p class="empty-state-text">We\'re verifying our first wave of clinic partners.</p></div>';
+        return;
+      }
+      grid.innerHTML = clinics.map(clinic => renderClinicCard(clinic)).join('');
+    } catch (err) {
+      // Fallback with demo clinics if API unavailable
+      const grid = document.getElementById('clinics-grid');
+      grid.innerHTML = renderDemoClinics();
+    }
+  }
+
+  function renderClinicCard(clinic) {
+    const emoji = App.UI.getClinicTypeEmoji(clinic.clinic_type);
+    const stars = App.UI.renderStars(clinic.rating || 0);
+    return `
+      <article class="clinic-card card-interactive" onclick="window.location.href='/clinic-details.html?slug=${clinic.slug}'" aria-label="${clinic.name}">
+        <div class="clinic-card-image">
+          ${clinic.cover_image_url
+            ? `<img src="${clinic.cover_image_url}" alt="${clinic.name}" style="width:100%;height:100%;object-fit:cover;">`
+            : `<span style="font-size:3.5rem;">${emoji}</span>`}
+          ${clinic.is_verified ? '<div style="position:absolute;top:12px;left:12px;"><span class="verified-badge">✓ Verified</span></div>' : ''}
+        </div>
+        <div class="clinic-card-body">
+          <div class="flex-between mb-2">
+            <span class="badge badge-${clinic.clinic_type === 'modern_medicine' ? 'saffron' : 'green'}">${App.UI.getClinicTypeLabel(clinic.clinic_type)}</span>
+          </div>
+          <h3 class="clinic-card-name">${clinic.name}</h3>
+          <p class="clinic-card-location">📍 ${clinic.city}, ${clinic.state}</p>
+          <div class="flex-between mt-4">
+            <div class="rating">
+              ${stars}
+              <span class="rating-count">(${clinic.review_count || 0})</span>
+            </div>
+            <span style="font-size:0.9rem;font-weight:700;color:var(--primary);">
+              ₹${clinic.consultation_fee ? Math.round(clinic.consultation_fee).toLocaleString('en-IN') : '—'}
+            </span>
+          </div>
+        </div>
+      </article>
+    `;
+  }
+
+  function renderDemoClinics() {
+    const demos = [
+      { name: 'Kerala Ayurveda Heritage Centre', city: 'Kochi', state: 'Kerala', type: 'ayurveda', emoji: '🌿', rating: 4.8, reviews: 234, fee: 1500, slug: 'kerala-ayurveda-heritage' },
+      { name: 'Rishikesh Divine Wellness', city: 'Rishikesh', state: 'Uttarakhand', type: 'panchakarma', emoji: '💫', rating: 4.7, reviews: 189, fee: 1200, slug: 'rishikesh-divine-wellness' },
+      { name: 'Goa Ayurveda Beach Retreat', city: 'Goa', state: 'Goa', type: 'wellness_retreat', emoji: '🧘', rating: 4.9, reviews: 421, fee: 1800, slug: 'goa-ayurveda-beach' },
+      { name: 'Jaipur Royal Ayurveda Palace', city: 'Jaipur', state: 'Rajasthan', type: 'ayurveda', emoji: '🏰', rating: 4.8, reviews: 387, fee: 2200, slug: 'jaipur-royal-ayurveda' },
+      { name: 'Mumbai Integrative Health', city: 'Mumbai', state: 'Maharashtra', type: 'integrated', emoji: '⚕️', rating: 4.6, reviews: 312, fee: 2500, slug: 'mumbai-integrative-health' },
+      { name: 'Bengaluru Holistic Health Hub', city: 'Bengaluru', state: 'Karnataka', type: 'integrated', emoji: '🔬', rating: 4.7, reviews: 298, fee: 2000, slug: 'bengaluru-holistic-health' },
+    ];
+    return demos.map(c => `
+      <article class="clinic-card card-interactive" onclick="window.location.href='/clinic-details.html?slug=${c.slug}'" aria-label="${c.name}">
+        <div class="clinic-card-image" style="background: linear-gradient(135deg, var(--color-green-100), var(--color-teal-100));">
+          <span style="font-size:3.5rem;">${c.emoji}</span>
+          <div style="position:absolute;top:12px;left:12px;"><span class="verified-badge">✓ Verified</span></div>
+        </div>
+        <div class="clinic-card-body">
+          <div class="flex-between mb-2"><span class="badge badge-green">${App.UI.getClinicTypeLabel(c.type)}</span></div>
+          <h3 class="clinic-card-name">${c.name}</h3>
+          <p class="clinic-card-location">📍 ${c.city}, ${c.state}</p>
+          <div class="flex-between mt-4">
+            <div class="rating">
+              <span class="stars">★★★★★</span>
+              <span class="rating-count">(${c.reviews})</span>
+            </div>
+            <span style="font-size:0.9rem;font-weight:700;color:var(--primary);">₹${c.fee.toLocaleString('en-IN')}</span>
+          </div>
+        </div>
+      </article>
+    `).join('');
+  }
+
+  // ---- Load featured packages ----
+  async function loadFeaturedPackages() {
+    try {
+      const packages = await App.API.get('/treatments/packages?featured=true');
+      const grid = document.getElementById('packages-grid');
+      if (!packages || packages.length === 0) {
+        grid.innerHTML = '<div class="text-center" style="color:rgba(255,255,255,0.7);grid-column:1/-1;padding:40px;">Packages loading...</div>';
+        return;
+      }
+      grid.innerHTML = packages.map(pkg => renderPackageCard(pkg)).join('');
+    } catch {
+      const grid = document.getElementById('packages-grid');
+      grid.innerHTML = renderDemoPackages();
+    }
+  }
+
+  function renderPackageCard(pkg) {
+    return `
+      <article class="package-card" onclick="window.location.href='/booking.html?package=${pkg.id}'" aria-label="${pkg.name}">
+        <div style="height: 160px; background: linear-gradient(135deg, rgba(23,162,162,0.2), rgba(15,81,50,0.3)); display:flex;align-items:center;justify-content:center;font-size:3rem;">
+          ${pkg.category === 'panchakarma' ? '💫' : pkg.category === 'ayurveda' ? '🌿' : '🧘'}
+        </div>
+        <div class="card-body" style="background: rgba(255,255,255,0.07); backdrop-filter:blur(8px);">
+          <h3 style="color:white;font-size:1rem;margin-bottom:6px;">${pkg.name}</h3>
+          <p style="color:rgba(255,255,255,0.6);font-size:0.8rem;margin-bottom:12px;">${pkg.clinics?.city}, ${pkg.clinics?.state || ''}</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span class="badge badge-teal">${pkg.duration_days} Days</span>
+            <span style="color:var(--color-saffron-400);font-weight:800;font-size:1.1rem;">₹${pkg.price.toLocaleString('en-IN')}</span>
+          </div>
+        </div>
+      </article>
+    `;
+  }
+
+  function renderDemoPackages() {
+    const pkgs = [
+      { name: '7-Day Panchakarma Detox', days: 7, price: 45000, city: 'Kochi, Kerala', emoji: '💫', id: '30000000-0000-0000-0000-000000000001' },
+      { name: '14-Day Ayurveda Rejuvenation', days: 14, price: 85000, city: 'Kochi, Kerala', emoji: '🌿', id: '30000000-0000-0000-0000-000000000002' },
+      { name: '10-Day Luxury Goa Wellness', days: 10, price: 120000, city: 'Goa, Goa', emoji: '🏖️', id: '30000000-0000-0000-0000-000000000004' },
+      { name: 'Royal 7-Day Rajasthan Experience', days: 7, price: 75000, city: 'Jaipur, Rajasthan', emoji: '🏰', id: '30000000-0000-0000-0000-000000000008' },
+    ];
+    return pkgs.map(p => `
+      <article class="package-card" onclick="window.location.href='/booking.html?package=${p.id}'" aria-label="${p.name}">
+        <div style="height: 160px; background: linear-gradient(135deg, rgba(23,162,162,0.2), rgba(15,81,50,0.3)); display:flex;align-items:center;justify-content:center;font-size:3rem;">${p.emoji}</div>
+        <div class="card-body" style="background: rgba(255,255,255,0.07); backdrop-filter:blur(8px);">
+          <h3 style="color:white;font-size:1rem;margin-bottom:6px;">${p.name}</h3>
+          <p style="color:rgba(255,255,255,0.6);font-size:0.8rem;margin-bottom:12px;">${p.city}</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span class="badge badge-teal">${p.days} Days</span>
+            <span style="color:var(--color-saffron-400);font-weight:800;font-size:1.1rem;">₹${p.price.toLocaleString('en-IN')}</span>
+          </div>
+        </div>
+      </article>
+    `).join('');
+  }
+
+  // ---- Category browse ----
+  function browseCategory(type) {
+    window.location.href = `/clinics.html?type=${type}`;
+  }
+
+  // ---- Hero search ----
+  document.getElementById('hero-search-btn').addEventListener('click', () => {
+    const q = document.getElementById('hero-search').value.trim();
+    if (q) window.location.href = `/clinics.html?search=${encodeURIComponent(q)}`;
+    else window.location.href = '/clinics.html';
+  });
+
+  document.getElementById('hero-search').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('hero-search-btn').click();
+  });
+
+  // ---- Initialize page ----
+  document.addEventListener('DOMContentLoaded', async () => {
+    await Promise.all([loadFeaturedClinics(), loadFeaturedPackages()]);
+  });
+</script>
+</body>
+</html>

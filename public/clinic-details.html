@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clinic Profile — Heal in India</title>
+  <meta name="description" content="View clinic accreditations, doctors, available Panchakarma packages, treatments, patient reviews, and book verified appointments.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+
+<div class="disclaimer-strip" role="note">
+  ⚕️ <strong>Medical Disclaimer:</strong> This profile is informational. Treatments are conducted by certified medical/Ayurvedic staff.
+</div>
+
+<!-- Navigation -->
+<nav class="navbar" role="navigation">
+  <div class="container">
+    <div class="navbar-inner">
+      <a href="/" class="navbar-brand">
+        <div class="brand-logo" aria-hidden="true">🌿</div>
+        <span class="brand-name">Heal in India</span>
+      </a>
+
+      <div class="navbar-nav" id="navbar-nav">
+        <a href="/clinics.html" class="nav-link active">Find Clinics</a>
+        <a href="/treatments.html" class="nav-link">Treatments</a>
+        <a href="/travel-visa.html" class="nav-link">Medical Tourism</a>
+        <a href="/records.html" class="nav-link">Health Records</a>
+      </div>
+
+      <div class="navbar-actions">
+        <div data-auth-show="loggedOut" class="flex gap-2">
+          <a href="/login.html" class="btn btn-ghost btn-sm">Login</a>
+          <a href="/signup.html" class="btn btn-primary btn-sm">Get Started</a>
+        </div>
+        <div data-auth-show="loggedIn" class="hidden flex gap-2">
+          <a href="/dashboard.html" class="btn btn-outline btn-sm">Dashboard</a>
+          <button class="btn btn-ghost btn-sm" data-logout>Logout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div id="clinic-loading" class="section text-center">
+  <span class="spinner"></span>
+  <p class="mt-4" style="color: var(--text-secondary);">Loading clinic details...</p>
+</div>
+
+<main id="clinic-content" class="hidden">
+  <!-- Hero Banner -->
+  <section style="position: relative; background: var(--color-charcoal); color: white; min-height: 320px; display: flex; align-items: flex-end; padding-bottom: 40px; padding-top: 60px;">
+    <div id="clinic-bg" style="position: absolute; inset: 0; opacity: 0.35; background-size: cover; background-position: center;"></div>
+    <div class="container" style="position: relative; z-index: 2;">
+      <a href="/clinics.html" class="btn btn-ghost btn-sm mb-4" style="color: white; border-color: rgba(255,255,255,0.4);">← Back to Clinics</a>
+      <div class="flex-between flex-wrap gap-4 align-items: flex-end;">
+        <div>
+          <div class="flex gap-2 align-items: center mb-2">
+            <span class="badge badge-green" id="clinic-badge-type">Ayurveda</span>
+            <span class="verified-badge" id="clinic-verified-tag">✓ Verified Center</span>
+            <span class="badge badge-teal">AYUSH / NABH Standard</span>
+          </div>
+          <h1 id="clinic-name" style="font-size: 2.4rem; color: white; margin-bottom: 8px;">Clinic Name</h1>
+          <p id="clinic-location" style="color: rgba(255,255,255,0.85); font-size: 1.05rem;">📍 Location</p>
+        </div>
+        <div class="flex gap-3">
+          <a id="book-consultation-btn" href="/booking.html" class="btn btn-accent btn-lg">Book Consultation →</a>
+          <a href="/travel-visa.html" class="btn btn-outline btn-lg" style="color: white; border-color: white;">Ayush Visa Support</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Details Body -->
+  <section class="section">
+    <div class="container">
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 40px;">
+        <!-- Left Column: Info & Offerings -->
+        <div>
+          <!-- About -->
+          <div class="card p-6 mb-8">
+            <h2 style="font-size: 1.4rem; margin-bottom: 16px; color: var(--color-charcoal);">About the Center</h2>
+            <p id="clinic-desc" style="line-height: 1.7; color: var(--color-gray-700); font-size: 1.05rem;"></p>
+            
+            <h3 class="mt-6 mb-3" style="font-size: 1.1rem;">Specialties & Clinical Focus</h3>
+            <div id="clinic-specialties" class="flex gap-2 flex-wrap"></div>
+            
+            <h3 class="mt-6 mb-3" style="font-size: 1.1rem;">Languages Spoken</h3>
+            <div id="clinic-languages" class="flex gap-2 flex-wrap"></div>
+          </div>
+
+          <!-- Multi-day Packages -->
+          <div class="mb-8">
+            <div class="flex-between mb-4">
+              <h2 style="font-size: 1.4rem; color: var(--color-charcoal);">Multi-day Therapy Packages</h2>
+              <span class="caption">Includes medical supervision & meals</span>
+            </div>
+            <div id="clinic-packages-container" class="flex flex-column gap-4">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Doctors & Practitioners -->
+          <div class="mb-8">
+            <h2 style="font-size: 1.4rem; color: var(--color-charcoal); margin-bottom: 16px;">Verified Doctors & Practitioners</h2>
+            <div id="clinic-doctors-container" class="grid grid-2 gap-4">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Reviews -->
+          <div>
+            <h2 style="font-size: 1.4rem; color: var(--color-charcoal); margin-bottom: 16px;">Verified Patient Reviews</h2>
+            <div id="clinic-reviews-container" class="flex flex-column gap-4">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Quick Contact & Booking Widget -->
+        <div>
+          <div class="card p-6 sticky-card" style="position: sticky; top: 100px; box-shadow: var(--shadow-md);">
+            <div class="flex-between mb-4 pb-4" style="border-bottom: 1px solid var(--border-light);">
+              <div>
+                <span class="caption" style="display:block;">Consultation Fee</span>
+                <span id="sidebar-price" style="font-size: 1.8rem; font-weight: 800; color: var(--primary);">₹1,500</span>
+              </div>
+              <div class="text-right">
+                <span id="sidebar-rating" style="font-size: 1.2rem; font-weight: 700; color: var(--color-saffron-600);">★ 4.8</span>
+                <span id="sidebar-review-count" class="caption" style="display:block;">(234 reviews)</span>
+              </div>
+            </div>
+
+            <h3 style="font-size: 1rem; margin-bottom: 12px;">Plan Your Treatment</h3>
+            <p class="caption mb-4" style="line-height: 1.5;">Book an in-person consultation or select a multi-day Panchakarma/wellness program with verified clinic staff.</p>
+
+            <a id="sidebar-book-btn" href="/booking.html" class="btn btn-primary btn-block mb-3">Book Appointment Now</a>
+            <a href="/travel-visa.html" class="btn btn-outline btn-block mb-4">Request Visa Support Letter</a>
+
+            <div style="background: var(--color-green-50); border: 1px solid var(--color-green-100); border-radius: var(--radius-md); padding: 14px; font-size: 0.85rem;">
+              <div class="font-semibold text-primary mb-1">🌿 Verified Facility Highlights</div>
+              <ul style="margin: 0; padding-left: 18px; color: var(--text-secondary); line-height: 1.6;">
+                <li>NABH / AYUSH Guideline Compliant</li>
+                <li>In-house Certified Ayurvedic Vaidyas</li>
+                <li>Digital Health Record Integration</li>
+                <li>Airport Pickup & International Desk</li>
+              </ul>
+            </div>
+
+            <div class="mt-6 pt-4" style="border-top: 1px solid var(--border-light); font-size: 0.85rem; color: var(--text-secondary);">
+              <div class="mb-2"><strong>Phone:</strong> <span id="sidebar-phone">+91-XXXXXXXXXX</span></div>
+              <div class="mb-2"><strong>Email:</strong> <span id="sidebar-email">info@clinic.com</span></div>
+              <div><strong>Address:</strong> <span id="sidebar-address">Verified Address</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container text-center">
+    <p>© 2026 Heal in India. Medical Tourism & Integrated Wellness Platform.</p>
+  </div>
+</footer>
+
+<script src="/js/app.js"></script>
+<script>
+  async function loadClinicDetails() {
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get('slug') || 'kerala-ayurveda-heritage';
+
+    try {
+      const clinic = await App.API.get(`/clinics/${slug}`);
+      document.getElementById('clinic-loading').classList.add('hidden');
+      document.getElementById('clinic-content').classList.remove('hidden');
+
+      document.title = `${clinic.name} — Heal in India`;
+      document.getElementById('clinic-name').textContent = clinic.name;
+      document.getElementById('clinic-location').textContent = `📍 ${clinic.address_line1 || ''}, ${clinic.city}, ${clinic.state}`;
+      document.getElementById('clinic-desc').textContent = clinic.description;
+      document.getElementById('clinic-badge-type').textContent = App.UI.getClinicTypeLabel(clinic.clinic_type);
+      
+      if (clinic.cover_image_url) {
+        document.getElementById('clinic-bg').style.backgroundImage = `url('${clinic.cover_image_url}')`;
+      }
+
+      // Specialties
+      const specEl = document.getElementById('clinic-specialties');
+      specEl.innerHTML = (clinic.specialties || ['Ayurveda', 'Panchakarma', 'Detox']).map(s => `
+        <span class="badge badge-green">${s}</span>
+      `).join('');
+
+      // Languages
+      const langEl = document.getElementById('clinic-languages');
+      langEl.innerHTML = (clinic.languages_spoken || ['English', 'Hindi']).map(l => `
+        <span class="badge badge-gray">${l}</span>
+      `).join('');
+
+      // Sidebar info
+      document.getElementById('sidebar-price').textContent = `₹${clinic.consultation_fee ? Math.round(clinic.consultation_fee).toLocaleString('en-IN') : '1,500'}`;
+      document.getElementById('sidebar-rating').textContent = `★ ${clinic.rating || 4.8}`;
+      document.getElementById('sidebar-review-count').textContent = `(${clinic.review_count || 120} reviews)`;
+      document.getElementById('sidebar-phone').textContent = clinic.phone || '+91-484-2000001';
+      document.getElementById('sidebar-email').textContent = clinic.email || 'care@healinindia.com';
+      document.getElementById('sidebar-address').textContent = `${clinic.address_line1 || ''}, ${clinic.city}, ${clinic.state}`;
+
+      document.getElementById('book-consultation-btn').href = `/booking.html?clinic=${clinic.id}`;
+      document.getElementById('sidebar-book-btn').href = `/booking.html?clinic=${clinic.id}`;
+
+      // Packages
+      const pkgContainer = document.getElementById('clinic-packages-container');
+      const packages = clinic.treatment_packages || [];
+      if (packages.length === 0) {
+        pkgContainer.innerHTML = `<div class="card p-4 text-center caption">Consult clinic directly for customized treatment packages.</div>`;
+      } else {
+        pkgContainer.innerHTML = packages.map(pkg => `
+          <div class="card p-5 flex-between flex-wrap gap-4" style="border-left: 4px solid var(--primary);">
+            <div>
+              <div class="flex gap-2 align-items: center mb-1">
+                <span class="badge badge-teal">${pkg.duration_days} Days Program</span>
+                <span class="badge badge-gray">${App.UI.getClinicTypeLabel(pkg.category)}</span>
+              </div>
+              <h3 style="font-size: 1.15rem; margin-bottom: 6px;">${pkg.name}</h3>
+              <p style="font-size: 0.88rem; color: var(--text-secondary); max-width: 550px; margin-bottom: 8px;">
+                ${pkg.description || 'Complete rejuvenation and detoxification program under qualified medical supervision.'}
+              </p>
+              <div class="flex gap-2 flex-wrap">
+                ${(pkg.inclusions || []).slice(0, 3).map(inc => `<span class="caption" style="color:var(--color-green-700);">✓ ${inc}</span>`).join(' ')}
+              </div>
+            </div>
+            <div class="text-right">
+              <span class="caption" style="display:block;">All-inclusive Package</span>
+              <div style="font-size: 1.5rem; font-weight: 800; color: var(--color-saffron-700); margin-bottom: 8px;">
+                ₹${Math.round(pkg.price).toLocaleString('en-IN')}
+              </div>
+              <a href="/booking.html?package=${pkg.id}&clinic=${clinic.id}" class="btn btn-primary btn-sm">Book Package →</a>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Practitioners
+      const docContainer = document.getElementById('clinic-doctors-container');
+      const doctors = clinic.practitioners || [
+        { name: 'Dr. Vaidya Krishnan Namboodiri', qualification: 'BAMS, MD (Ayurveda)', specialization: 'Panchakarma & Chronic Disorders', years_of_experience: 26, rating: 4.9 },
+        { name: 'Dr. Ananya Sen', qualification: 'BAMS, Yoga Therapist', specialization: 'Ayurvedic Lifestyle Medicine', years_of_experience: 12, rating: 4.8 }
+      ];
+      docContainer.innerHTML = doctors.map(doc => `
+        <div class="card p-4">
+          <div class="flex gap-3 align-items: center mb-3">
+            <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--color-green-100); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">👨‍⚕️</div>
+            <div>
+              <div class="font-semibold" style="font-size: 1rem;">${doc.name || doc.profiles?.full_name || 'Dr. Certified Vaidya'}</div>
+              <div class="caption" style="color: var(--primary); font-weight: 600;">${doc.qualification || 'BAMS Specialist'}</div>
+            </div>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px;">
+            ${doc.specialization || 'Classical Ayurvedic Therapeutics & Panchakarma'}
+          </p>
+          <div class="flex-between caption pt-2" style="border-top: 1px solid var(--border-light);">
+            <span>${doc.years_of_experience || 15}+ Years Exp</span>
+            <span style="color: var(--color-saffron-600); font-weight: 700;">★ ${doc.rating || 4.9}</span>
+          </div>
+        </div>
+      `).join('');
+
+      // Reviews
+      const revContainer = document.getElementById('clinic-reviews-container');
+      const reviews = clinic.reviews || [];
+      if (reviews.length === 0) {
+        revContainer.innerHTML = `<div class="card p-4 text-center caption">No public reviews yet. Be the first to leave a review!</div>`;
+      } else {
+        revContainer.innerHTML = reviews.map(r => `
+          <div class="card p-4">
+            <div class="flex-between mb-2">
+              <span style="color: var(--color-saffron-600); font-weight: 700;">★★★★★</span>
+              <span class="caption">${r.created_at || 'Recent'}</span>
+            </div>
+            <div class="font-semibold mb-1" style="font-size: 0.95rem;">${r.title || 'Exceptional Care & Treatment'}</div>
+            <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 8px;">"${r.body}"</p>
+            <div class="caption font-semibold" style="color: var(--primary);">— ${r.author_name || r.profiles?.full_name || 'Verified Patient'}</div>
+          </div>
+        `).join('');
+      }
+
+    } catch (err) {
+      console.error(err);
+      document.getElementById('clinic-loading').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-state-icon">⚠️</div>
+          <p class="empty-state-title">Failed to load clinic</p>
+          <a href="/clinics.html" class="btn btn-outline btn-sm mt-4">Browse Clinics</a>
+        </div>
+      `;
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', loadClinicDetails);
+</script>
+</body>
+</html>
